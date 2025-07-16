@@ -70,10 +70,15 @@ function initEasterEggs() {
         playSound('click');
     });
     
-    // Funcionalidad de los botones del navigator
+    // Funcionalidad de los botones del navigator (desktop y mobile)
     const navButtons = document.querySelectorAll('.nav-btn');
+    const mobileNavButtons = document.querySelectorAll('.mobile-nav-btn');
     const statusText = document.querySelector('.status-text');
+    const mobileStatusText = document.querySelector('.mobile-status-text');
     const loadingBar = document.querySelector('.loading-bar');
+    
+    // Inicializar navegador móvil
+    initMobileNavigator();
     
     // Estado del navigator - navegación por secciones
     const sections = [
@@ -86,6 +91,7 @@ function initEasterEggs() {
     ];
     let currentSectionIndex = 0;
     
+    // Configurar navegador desktop con nueva funcionalidad
     navButtons.forEach((button, index) => {
         button.addEventListener('click', () => {
             playSound('click');
@@ -96,92 +102,12 @@ function initEasterEggs() {
                 button.style.transform = 'scale(1)';
             }, 100);
             
-            // Diferentes acciones según el botón
-            switch(index) {
-                case 0: // 🏠 Home
-                    statusText.textContent = 'Navegando a la página principal...';
-                    
-                    // Scroll inmediato hacia arriba
-                    window.scrollTo({
-                        top: 0,
-                        behavior: 'smooth'
-                    });
-                    
-                    // Reset a la primera sección
-                    currentSectionIndex = 0;
-                    
-                    setTimeout(() => {
-                        statusText.textContent = 'Página principal cargada';
-                    }, 300);
-                    break;
-                    
-                case 1: // ⬅️ Atrás
-                    if (currentSectionIndex > 0) {
-                        currentSectionIndex--;
-                        const section = sections[currentSectionIndex];
-                        statusText.textContent = 'Navegando hacia atrás...';
-                        
-                        // Scroll inmediato a la sección
-                        const sectionElement = document.querySelector(section.selector);
-                        if (sectionElement) {
-                            sectionElement.scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'start'
-                            });
-                        }
-                        
-                        setTimeout(() => {
-                            statusText.textContent = `Sección: ${section.title}`;
-                        }, 300);
-                    } else {
-                        statusText.textContent = 'Ya estás en la primera sección';
-                    }
-                    break;
-                    
-                case 2: // ➡️ Adelante
-                    if (currentSectionIndex < sections.length - 1) {
-                        currentSectionIndex++;
-                        const section = sections[currentSectionIndex];
-                        statusText.textContent = 'Navegando hacia adelante...';
-                        
-                        // Scroll inmediato a la sección
-                        const sectionElement = document.querySelector(section.selector);
-                        if (sectionElement) {
-                            sectionElement.scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'start'
-                            });
-                        }
-                        
-                        setTimeout(() => {
-                            statusText.textContent = `Sección: ${section.title}`;
-                        }, 300);
-                    } else {
-                        statusText.textContent = 'Ya estás en la última sección';
-                    }
-                    break;
-                    
-                case 3: // 🔄 Recargar
-                    statusText.textContent = 'Recargando página...';
-                    
-                    // Efecto de parpadeo en el contenido
-                    const contentBlocks = document.querySelectorAll('.content-block');
-                    contentBlocks.forEach((block, i) => {
-                        setTimeout(() => {
-                            block.style.animation = 'blink-smooth 0.3s ease-in-out';
-                            setTimeout(() => {
-                                block.style.animation = '';
-                            }, 300);
-                        }, i * 100);
-                    });
-                    
-                    // Actualizar contador de visitantes
-                    updateVisitorCount();
-                    
-                    setTimeout(() => {
-                        statusText.textContent = 'Página recargada exitosamente';
-                    }, 500);
-                    break;
+            // Mapear botones a acciones
+            const actions = ['home', 'back', 'forward', 'reload'];
+            const action = actions[index];
+            
+            if (action && statusText) {
+                handleNavigationAction(action, statusText);
             }
         });
     });
@@ -217,6 +143,138 @@ function initEasterEggs() {
             triggerKonamiEasterEgg();
         }
     });
+}
+
+// Inicializar navegador móvil
+function initMobileNavigator() {
+    const mobileToggle = document.querySelector('.mobile-menu-toggle');
+    const mobileContent = document.querySelector('.mobile-nav-content');
+    const mobileNavButtons = document.querySelectorAll('.mobile-nav-btn');
+    const mobileStatusText = document.querySelector('.mobile-status-text');
+    
+    // Toggle del menú móvil
+    if (mobileToggle && mobileContent) {
+        mobileToggle.addEventListener('click', () => {
+            playSound('click');
+            mobileContent.classList.toggle('active');
+            
+            // Cambiar icono del toggle
+            mobileToggle.textContent = mobileContent.classList.contains('active') ? '✕' : '☰';
+        });
+    }
+    
+    // Funcionalidad de botones móviles
+    mobileNavButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            playSound('click');
+            
+            const action = button.getAttribute('data-action');
+            handleNavigationAction(action, mobileStatusText);
+            
+            // Efecto visual
+            button.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                button.style.transform = 'scale(1)';
+            }, 150);
+        });
+    });
+}
+
+// Función común para manejar navegación (desktop y mobile)
+function handleNavigationAction(action, statusElement) {
+    const sections = [
+        { title: 'Bienvenida', selector: '.welcome-section' },
+        { title: '¿Qué es ZatoBox?', selector: '.what-is-section' },
+        { title: '¿Por qué lo hacemos?', selector: '.why-section' },
+        { title: '¿Qué ofrecemos?', selector: '.features-section' },
+        { title: '¿Cómo colaborar?', selector: '.collaborate-section' },
+        { title: 'Call to Action', selector: '.cta-section' }
+    ];
+    
+    if (!window.currentSectionIndex) {
+        window.currentSectionIndex = 0;
+    }
+    
+    switch(action) {
+        case 'home':
+            statusElement.textContent = 'Navegando a inicio...';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.currentSectionIndex = 0;
+            
+            setTimeout(() => {
+                statusElement.textContent = 'Inicio cargado ✅';
+            }, 500);
+            break;
+            
+        case 'back':
+            if (window.currentSectionIndex > 0) {
+                window.currentSectionIndex--;
+                const section = sections[window.currentSectionIndex];
+                statusElement.textContent = 'Navegando atrás...';
+                
+                const sectionElement = document.querySelector(section.selector);
+                if (sectionElement) {
+                    sectionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+                
+                setTimeout(() => {
+                    statusElement.textContent = `📍 ${section.title}`;
+                }, 500);
+            } else {
+                statusElement.textContent = '⚠️ Primera sección';
+                setTimeout(() => {
+                    statusElement.textContent = 'Rebelión activa...';
+                }, 2000);
+            }
+            break;
+            
+        case 'forward':
+            if (window.currentSectionIndex < sections.length - 1) {
+                window.currentSectionIndex++;
+                const section = sections[window.currentSectionIndex];
+                statusElement.textContent = 'Navegando adelante...';
+                
+                const sectionElement = document.querySelector(section.selector);
+                if (sectionElement) {
+                    sectionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+                
+                setTimeout(() => {
+                    statusElement.textContent = `📍 ${section.title}`;
+                }, 500);
+            } else {
+                statusElement.textContent = '⚠️ Última sección';
+                setTimeout(() => {
+                    statusElement.textContent = 'Rebelión activa...';
+                }, 2000);
+            }
+            break;
+            
+        case 'reload':
+            statusElement.textContent = 'Recargando rebelión...';
+            
+            // Efecto visual de recarga
+            const contentBlocks = document.querySelectorAll('.content-block');
+            contentBlocks.forEach((block, i) => {
+                setTimeout(() => {
+                    block.style.animation = 'blink-smooth 0.3s ease-in-out';
+                    setTimeout(() => {
+                        block.style.animation = '';
+                    }, 300);
+                }, i * 50);
+            });
+            
+            // Actualizar contador de visitantes
+            updateVisitorCount();
+            
+            setTimeout(() => {
+                statusElement.textContent = '⚡ Recargado exitosamente';
+                setTimeout(() => {
+                    statusElement.textContent = 'Rebelión activa...';
+                }, 2000);
+            }, 800);
+            break;
+    }
 }
 
 // Mostrar easter egg
@@ -283,24 +341,44 @@ function triggerKonamiEasterEgg() {
     }
 }
 
-// Efectos de sonido
+// Efectos de sonido optimizados
 function initSoundEffects() {
     const clickSound = document.getElementById('click-sound');
     
-    // Sonido al hacer hover en botones
-    const buttons = document.querySelectorAll('button, .cta-btn, .nav-btn');
-    buttons.forEach(button => {
-        button.addEventListener('mouseenter', () => {
+    // Precargar el audio para reducir latencia
+    if (clickSound) {
+        clickSound.preload = 'auto';
+        clickSound.volume = 0.3;
+    }
+    
+    // Seleccionar TODOS los elementos clickeables (desktop y mobile)
+    const clickableElements = document.querySelectorAll(`
+        button, 
+        .cta-btn, 
+        .nav-btn,
+        .mobile-nav-btn,
+        .mobile-menu-toggle,
+        .feature-card, 
+        .feature-item, 
+        .contribution-item,
+        .main-title,
+        a[href],
+        input[type="submit"],
+        .close-modal
+    `);
+    
+    // Agregar sonido a todos los elementos clickeables
+    clickableElements.forEach(element => {
+        // Sonido al hacer clic (sin hover para reducir ruido)
+        element.addEventListener('click', (e) => {
             playSound('click');
-        });
+        }, { passive: true });
+        
+        // Agregar clase para indicar que es clickeable
+        element.style.cursor = 'pointer';
     });
     
-    // Sonido al hacer clic
-    buttons.forEach(button => {
-        button.addEventListener('click', () => {
-            playSound('click');
-        });
-    });
+    console.log(`🔊 Sonido agregado a ${clickableElements.length} elementos`);
 }
 
 // Inicializar funcionalidad del modal GIF
@@ -445,15 +523,22 @@ function testModal() {
     showGifModal('images/fire-thank-you.gif', 'https://github.com/zatobox');
 }
 
-// Reproducir sonido
+// Reproducir sonido optimizado
 function playSound(type) {
     const audio = document.getElementById('click-sound');
     if (audio) {
+        // Resetear a 0 para permitir múltiples clicks rápidos
         audio.currentTime = 0;
-        audio.play().catch(e => {
-            // Ignorar errores de autoplay
-            console.log('Audio no reproducido:', e);
-        });
+        // Configurar volumen
+        audio.volume = 0.3;
+        // Reproducir inmediatamente
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(e => {
+                // Ignorar errores de autoplay en navegadores estrictos
+                console.log('Audio bloqueado por navegador:', e.message);
+            });
+        }
     }
 }
 

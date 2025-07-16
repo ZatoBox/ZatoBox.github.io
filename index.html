@@ -12,8 +12,11 @@
     <div class="stars"></div>
     <div class="matrix-bg"></div>
     
-    <!-- Fake old-style navigator -->
-    <div class="fake-navigator">
+    <!-- Contenedor principal centrado -->
+    <div class="page-wrapper">
+    
+    <!-- Navigator para Desktop -->
+    <div class="fake-navigator desktop-nav">
         <div class="nav-header">
             <span class="nav-title">🌐 ZatoBox Navigator v1.0</span>
         </div>
@@ -26,6 +29,28 @@
         <div class="nav-status">
             <span class="status-text">Connecting to the rebellion...</span>
             <div class="loading-bar"></div>
+        </div>
+    </div>
+
+    <!-- Navigator compacto para Mobile/Tablet -->
+    <div class="mobile-navigator">
+        <div class="mobile-nav-header">
+            <span class="mobile-nav-title">🚀 ZatoBox</span>
+            <button class="mobile-menu-toggle">☰</button>
+        </div>
+        <div class="mobile-nav-content">
+            <div class="mobile-nav-buttons">
+                <button class="mobile-nav-btn" data-action="home">🏠 Inicio</button>
+                <button class="mobile-nav-btn" data-action="back">⬅️ Atrás</button>
+                <button class="mobile-nav-btn" data-action="forward">➡️ Adelante</button>
+                <button class="mobile-nav-btn" data-action="reload">🔄 Recargar</button>
+            </div>
+            <div class="mobile-nav-status">
+                <span class="mobile-status-text">Rebelión activa...</span>
+                <div class="mobile-progress-bar">
+                    <div class="mobile-progress-fill"></div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -298,6 +323,11 @@ npm start
             </div>
         </div>
     </div>
+    
+    </div> <!-- Cierre del page-wrapper -->
+
+    <!-- Sonido de click optimizado -->
+    <audio id="click-sound" src="sounds/click.mp3" preload="auto" volume="0.3"></audio>
 
     <script src="script.js"></script>
 </body>

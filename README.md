@@ -1,5 +1,13 @@
 # 🌟 ZatoBox - La Rebelión del Software Libre 🌟
 
+## 🚀 Comandos para Contribuir
+
+```bash
+git add .
+git commit -m "Tu mensaje"
+git push
+```
+
 ## 🚀 ¿Qué es ZatoBox?
 
 ZatoBox es una **caja registradora inteligente, descentralizada y de código abierto** que representa una rebelión contra el software cerrado y centralizado. Es un proyecto que combina la funcionalidad de un POS (Point of Sale) tradicional con las ventajas de las criptomonedas y la descentralización.
