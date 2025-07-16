@@ -4,16 +4,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 ZatoBox cargado - ¡La rebelión ha comenzado!');
     
-    // Inicializar todos los efectos
-    initEffects();
-    initEasterEggs();
-    initSoundEffects();
-    initAnimations();
-    initGifModal();
-    updateTimestamps();
-    
-    // Contador de visitantes falso
-    updateVisitorCount();
+    // Inicializar pantalla VHS de carga
+    initVHSLoadingScreen();
 });
 
 // Efectos principales
@@ -970,4 +962,162 @@ Easter eggs disponibles:
 - Scroll al final: Cinta VHS
 
 ¡Instala, forkea y comparte!
-`); 
+`);
+
+// ================================
+// PANTALLA VHS DE CARGA RETRO
+// ================================
+
+function initVHSLoadingScreen() {
+    console.log('📺 Iniciando pantalla VHS retro...');
+    
+    const vhsScreen = document.getElementById('vhs-loading-screen');
+    const timerElement = document.getElementById('vhs-timer');
+    
+    if (!vhsScreen || !timerElement) {
+        console.error('❌ Elementos VHS no encontrados');
+        initMainContent();
+        return;
+    }
+    
+    let timeLeft = 14;
+    let interferenceCounter = 0;
+    
+    // Actualizar timer cada segundo
+    const timerInterval = setInterval(() => {
+        timeLeft--;
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        timerElement.textContent = `LOADING... ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+        }
+    }, 1000);
+    
+    // Interferencias cada 2 segundos (leves que dejan ver la pantalla)
+    const interferenceInterval = setInterval(() => {
+        interferenceCounter++;
+        console.log(`📺 Interferencia ${interferenceCounter} - señal temporal clara`);
+        
+        // Crear efecto de interferencia que revela la pantalla
+        createInterferenceFlash();
+        
+        if (interferenceCounter >= 7) { // 14 segundos / 2 = 7 interferencias
+            clearInterval(interferenceInterval);
+        }
+    }, 2000);
+    
+    // Finalizar pantalla VHS después de 14 segundos
+    setTimeout(() => {
+        console.log('📺 Finalizando pantalla VHS - iniciando contenido principal');
+        
+        // Efecto de apagado de TV
+        vhsScreen.style.animation = 'vhs-shutdown 1s ease-in forwards';
+        
+        setTimeout(() => {
+            vhsScreen.style.display = 'none';
+            initMainContent();
+        }, 1000);
+    }, 14000);
+    
+    // Permitir saltar la pantalla presionando cualquier tecla
+    const skipHandler = (e) => {
+        console.log('⏭️ Saltando pantalla VHS por input del usuario');
+        clearInterval(timerInterval);
+        clearInterval(interferenceInterval);
+        
+        vhsScreen.style.animation = 'vhs-shutdown 0.5s ease-in forwards';
+        setTimeout(() => {
+            vhsScreen.style.display = 'none';
+            initMainContent();
+        }, 500);
+        
+        document.removeEventListener('keydown', skipHandler);
+        document.removeEventListener('click', skipHandler);
+    };
+    
+    document.addEventListener('keydown', skipHandler);
+    document.addEventListener('click', skipHandler);
+}
+
+function createInterferenceFlash() {
+    const vhsScreen = document.getElementById('vhs-loading-screen');
+    if (!vhsScreen) return;
+    
+    // Crear flash de interferencia que brevemente muestra contenido
+    const flash = document.createElement('div');
+    flash.style.cssText = `
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255,255,255,0.8);
+        z-index: 10002;
+        animation: interference-flash 0.3s ease-out;
+    `;
+    
+    vhsScreen.appendChild(flash);
+    
+    setTimeout(() => {
+        flash.remove();
+    }, 300);
+    
+    // Agregar CSS para la animación si no existe
+    if (!document.querySelector('#interference-flash-css')) {
+        const style = document.createElement('style');
+        style.id = 'interference-flash-css';
+        style.textContent = `
+            @keyframes interference-flash {
+                0% { opacity: 0; }
+                20% { opacity: 0.8; }
+                40% { opacity: 0.2; }
+                60% { opacity: 0.9; }
+                80% { opacity: 0.1; }
+                100% { opacity: 0; }
+            }
+            
+            @keyframes vhs-shutdown {
+                0% { 
+                    opacity: 1; 
+                    transform: scale(1); 
+                    filter: brightness(1); 
+                }
+                30% { 
+                    opacity: 0.8; 
+                    transform: scale(1.01); 
+                    filter: brightness(1.5); 
+                }
+                70% { 
+                    opacity: 0.3; 
+                    transform: scale(0.99); 
+                    filter: brightness(0.5); 
+                }
+                100% { 
+                    opacity: 0; 
+                    transform: scale(0.001); 
+                    filter: brightness(0); 
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+}
+
+function initMainContent() {
+    console.log('🚀 Iniciando contenido principal de ZatoBox');
+    
+    // Inicializar todos los efectos principales
+    initEffects();
+    initEasterEggs();
+    initSoundEffects();
+    initAnimations();
+    initGifModal();
+    updateTimestamps();
+    
+    // Contador de visitantes falso
+    updateVisitorCount();
+    
+    console.log('✅ Contenido principal cargado completamente');
+} 
