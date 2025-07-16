@@ -563,10 +563,16 @@ function toggleMusic() {
     console.log('🎵 Estado actual de la música:', {
         paused: backgroundMusic.paused,
         src: backgroundMusic.src,
-        volume: backgroundMusic.volume
+        volume: backgroundMusic.volume,
+        currentTime: backgroundMusic.currentTime
     });
     
-    if (backgroundMusic.paused) {
+    // Verificar si la música está realmente reproduciéndose
+    const isPlaying = !backgroundMusic.paused && !backgroundMusic.ended && backgroundMusic.currentTime > 0;
+    
+    console.log('🎵 ¿Está reproduciéndose?', isPlaying);
+    
+    if (!isPlaying) {
         console.log('🎵 Intentando reproducir música...');
         backgroundMusic.play().then(() => {
             console.log('🎵 Música iniciada exitosamente');
@@ -625,7 +631,27 @@ function initBackgroundMusic() {
         musicBtn.addEventListener('click', () => {
             console.log('🎵 Clic en botón de música (desktop)');
             playSound('click');
-            toggleMusic();
+            
+            // Lógica directa para el botón desktop
+            if (!backgroundMusic.src || backgroundMusic.src === window.location.href) {
+                backgroundMusic.src = 'sounds/Lost in the Matrix.mp3';
+                backgroundMusic.volume = 0.6;
+                backgroundMusic.loop = true;
+                console.log('🎵 Música cargada para desktop');
+            }
+            
+            if (backgroundMusic.paused) {
+                backgroundMusic.play().then(() => {
+                    musicBtn.textContent = '⏸️';
+                    if (mobileMusicBtn) mobileMusicBtn.textContent = '⏸️';
+                    console.log('🎵 Música iniciada desde desktop');
+                });
+            } else {
+                backgroundMusic.pause();
+                musicBtn.textContent = '🎵';
+                if (mobileMusicBtn) mobileMusicBtn.textContent = '🎵';
+                console.log('🎵 Música pausada desde desktop');
+            }
         });
     }
     
@@ -634,11 +660,48 @@ function initBackgroundMusic() {
         mobileMusicBtn.addEventListener('click', () => {
             console.log('🎵 Clic en botón de música (móvil)');
             playSound('click');
-            toggleMusic();
+            
+            // Lógica directa para el botón móvil
+            if (!backgroundMusic.src || backgroundMusic.src === window.location.href) {
+                backgroundMusic.src = 'sounds/Lost in the Matrix.mp3';
+                backgroundMusic.volume = 0.6;
+                backgroundMusic.loop = true;
+                console.log('🎵 Música cargada para móvil');
+            }
+            
+            if (backgroundMusic.paused) {
+                backgroundMusic.play().then(() => {
+                    mobileMusicBtn.textContent = '⏸️';
+                    if (musicBtn) musicBtn.textContent = '⏸️';
+                    console.log('🎵 Música iniciada desde móvil');
+                });
+            } else {
+                backgroundMusic.pause();
+                mobileMusicBtn.textContent = '🎵';
+                if (musicBtn) musicBtn.textContent = '🎵';
+                console.log('🎵 Música pausada desde móvil');
+            }
         });
     }
     
     console.log('✅ Música de fondo inicializada correctamente');
+    
+    // Función de prueba para verificar que todo funciona
+    window.testMusic = function() {
+        console.log('🧪 Función de prueba de música llamada');
+        const backgroundMusic = document.getElementById('background-music');
+        if (backgroundMusic) {
+            console.log('🧪 Estado de prueba:', {
+                src: backgroundMusic.src,
+                paused: backgroundMusic.paused,
+                ended: backgroundMusic.ended,
+                currentTime: backgroundMusic.currentTime,
+                duration: backgroundMusic.duration,
+                volume: backgroundMusic.volume
+            });
+        }
+        toggleMusic();
+    };
 }
 
 // Función para crear degradado suave del volumen
