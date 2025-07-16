@@ -811,6 +811,7 @@ setTimeout(() => {
     randomGlitch();
     addVibrationEffect();
     initGuestbook();
+    initLogoGlitchEffect();
 }, 2000);
 
 // Efecto de cursor personalizado
@@ -853,6 +854,94 @@ if (!document.querySelector('#cursor-css')) {
         }
     `;
     document.head.appendChild(style);
+}
+
+// Efecto de glitch del logo
+function initLogoGlitchEffect() {
+    const logo = document.getElementById('zatobox-logo');
+    if (!logo) return;
+    
+    const normalLogo = 'images/Frame 48095649 2.png';
+    const glitchLogo = 'images/Frame 48095649 glich.png';
+    
+    console.log('🎨 Iniciando efecto de glitch del logo...');
+    
+    function performGlitchCycle() {
+        // Fase 1: Glitch inicial (cambiar a logo con glitch)
+        setTimeout(() => {
+            logo.src = glitchLogo;
+            logo.style.filter = 'hue-rotate(180deg) contrast(200%) brightness(150%)';
+            console.log('👾 Glitch activado - Logo cambiado');
+        }, 500);
+        
+        // Fase 2: Volver al logo normal
+        setTimeout(() => {
+            logo.src = normalLogo;
+            logo.style.filter = 'none';
+            console.log('✅ Logo restaurado');
+        }, 1500);
+        
+        // Fase 3: Segundo glitch más intenso
+        setTimeout(() => {
+            logo.src = glitchLogo;
+            logo.style.filter = 'hue-rotate(90deg) contrast(300%) brightness(200%) saturate(200%)';
+            logo.style.transform = 'translate(2px, -2px) scale(1.02)';
+            console.log('⚡ Segundo glitch intenso');
+        }, 3000);
+        
+        // Fase 4: Restaurar completamente y aplicar shake
+        setTimeout(() => {
+            logo.src = normalLogo;
+            logo.style.filter = 'none';
+            logo.style.transform = 'none';
+            
+            // Efecto de vibración al restaurar
+            logo.style.animation = 'logo-shake 0.5s ease-in-out';
+            setTimeout(() => {
+                logo.style.animation = 'none';
+            }, 500);
+            
+            console.log('🔄 Logo completamente restaurado');
+        }, 4000);
+    }
+    
+    // Iniciar el primer ciclo después de 3 segundos
+    setTimeout(() => {
+        performGlitchCycle();
+        
+        // Repetir cada 15 segundos
+        setInterval(() => {
+            console.log('🔄 Iniciando nuevo ciclo de glitch...');
+            performGlitchCycle();
+        }, 15000);
+        
+    }, 3000);
+    
+    // Agregar CSS para la animación de shake
+    if (!document.querySelector('#logo-shake-css')) {
+        const style = document.createElement('style');
+        style.id = 'logo-shake-css';
+        style.textContent = `
+            @keyframes logo-shake {
+                0%, 100% { transform: translateX(0); }
+                10% { transform: translateX(-2px) rotate(-1deg); }
+                20% { transform: translateX(2px) rotate(1deg); }
+                30% { transform: translateX(-2px) rotate(-1deg); }
+                40% { transform: translateX(2px) rotate(1deg); }
+                50% { transform: translateX(-1px) rotate(-0.5deg); }
+                60% { transform: translateX(1px) rotate(0.5deg); }
+                70% { transform: translateX(-1px) rotate(-0.5deg); }
+                80% { transform: translateX(1px) rotate(0.5deg); }
+                90% { transform: translateX(0) rotate(0deg); }
+            }
+            
+            @keyframes glitch-flicker {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.8; }
+            }
+        `;
+        document.head.appendChild(style);
+    }
 }
 
 
