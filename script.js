@@ -535,9 +535,17 @@ function initSoundEffects() {
 // Inicializar funcionalidad del modal GIF
 // Función para controlar la música de fondo
 function toggleMusic() {
+    console.log('🎵 Función toggleMusic llamada');
+    
     const backgroundMusic = document.getElementById('background-music');
     const musicBtn = document.getElementById('musicBtn');
     const mobileMusicBtn = document.getElementById('mobileMusicBtn');
+    
+    console.log('🎵 Elementos encontrados:', {
+        backgroundMusic: !!backgroundMusic,
+        musicBtn: !!musicBtn,
+        mobileMusicBtn: !!mobileMusicBtn
+    });
     
     if (!backgroundMusic) {
         console.error('❌ Elemento de música de fondo no encontrado');
@@ -552,19 +560,39 @@ function toggleMusic() {
         console.log('🎵 Música cargada bajo demanda');
     }
     
+    console.log('🎵 Estado actual de la música:', {
+        paused: backgroundMusic.paused,
+        src: backgroundMusic.src,
+        volume: backgroundMusic.volume
+    });
+    
     if (backgroundMusic.paused) {
+        console.log('🎵 Intentando reproducir música...');
         backgroundMusic.play().then(() => {
-            console.log('🎵 Música iniciada');
-            if (musicBtn) musicBtn.textContent = '⏸️';
-            if (mobileMusicBtn) mobileMusicBtn.textContent = '⏸️';
+            console.log('🎵 Música iniciada exitosamente');
+            if (musicBtn) {
+                musicBtn.textContent = '⏸️';
+                console.log('🎵 Botón desktop actualizado a ⏸️');
+            }
+            if (mobileMusicBtn) {
+                mobileMusicBtn.textContent = '⏸️';
+                console.log('🎵 Botón móvil actualizado a ⏸️');
+            }
         }).catch(error => {
             console.error('❌ Error al reproducir música:', error);
         });
     } else {
+        console.log('🎵 Pausando música...');
         backgroundMusic.pause();
-        console.log('🎵 Música pausada');
-        if (musicBtn) musicBtn.textContent = '🎵';
-        if (mobileMusicBtn) mobileMusicBtn.textContent = '🎵';
+        console.log('🎵 Música pausada exitosamente');
+        if (musicBtn) {
+            musicBtn.textContent = '🎵';
+            console.log('🎵 Botón desktop actualizado a 🎵');
+        }
+        if (mobileMusicBtn) {
+            mobileMusicBtn.textContent = '🎵';
+            console.log('🎵 Botón móvil actualizado a 🎵');
+        }
     }
 }
 
@@ -576,29 +604,24 @@ function initBackgroundMusic() {
     const musicBtn = document.getElementById('musicBtn');
     const mobileMusicBtn = document.getElementById('mobileMusicBtn');
     
+    console.log('🎵 Elementos de música encontrados:', {
+        backgroundMusic: !!backgroundMusic,
+        musicBtn: !!musicBtn,
+        mobileMusicBtn: !!mobileMusicBtn
+    });
+    
     if (!backgroundMusic) {
         console.error('❌ Elemento de música de fondo no encontrado');
         return;
     }
     
-    // Configurar música
+    // Configurar música básica
     backgroundMusic.volume = 0.6;
     backgroundMusic.loop = true;
     
-    // Variable para controlar si la música ya se cargó
-    let musicLoaded = false;
-    
-    // Función para cargar música bajo demanda
-    function loadMusic() {
-        if (!musicLoaded) {
-            backgroundMusic.src = 'sounds/Lost in the Matrix.mp3';
-            musicLoaded = true;
-            console.log('🎵 Música cargada bajo demanda');
-        }
-    }
-    
     // Event listeners para botones de música
     if (musicBtn) {
+        console.log('🎵 Configurando event listener para botón desktop');
         musicBtn.addEventListener('click', () => {
             console.log('🎵 Clic en botón de música (desktop)');
             playSound('click');
@@ -607,6 +630,7 @@ function initBackgroundMusic() {
     }
     
     if (mobileMusicBtn) {
+        console.log('🎵 Configurando event listener para botón móvil');
         mobileMusicBtn.addEventListener('click', () => {
             console.log('🎵 Clic en botón de música (móvil)');
             playSound('click');
@@ -614,7 +638,7 @@ function initBackgroundMusic() {
         });
     }
     
-    console.log('✅ Música de fondo inicializada (carga bajo demanda)');
+    console.log('✅ Música de fondo inicializada correctamente');
 }
 
 // Función para crear degradado suave del volumen
