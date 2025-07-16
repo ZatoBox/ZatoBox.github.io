@@ -12,6 +12,34 @@ body {
     overflow-x: hidden;
     cursor: crosshair;
     line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+/* Contenedor principal centrado para pantallas grandes */
+.page-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
+    width: 100%;
+}
+
+/* Para pantallas muy grandes (1920px+) */
+@media (min-width: 1920px) {
+    .page-wrapper {
+        max-width: 1600px;
+        margin: 0 auto;
+        padding: 0 40px;
+    }
+}
+
+/* Para pantallas ultra grandes (2560px+) */
+@media (min-width: 2560px) {
+    .page-wrapper {
+        max-width: 2000px;
+        margin: 0 auto;
+        padding: 0 80px;
+    }
 }
 
 /* Fondo animado con estrellas */
@@ -79,6 +107,23 @@ body {
     padding: 10px;
     z-index: 1000;
     box-shadow: 0 0 20px rgba(255,102,0,0.5);
+}
+
+/* Ajustes del navigator para pantallas grandes */
+@media (min-width: 1920px) {
+    .fake-navigator {
+        left: calc((100vw - 1600px) / 2 + 20px);
+        width: 220px;
+        padding: 15px;
+    }
+}
+
+@media (min-width: 2560px) {
+    .fake-navigator {
+        left: calc((100vw - 2000px) / 2 + 20px);
+        width: 240px;
+        padding: 20px;
+    }
 }
 
 .nav-header {
@@ -166,7 +211,33 @@ body {
 .main-content {
     margin-left: 240px;
     padding: 20px;
-    max-width: 1200px;
+    max-width: none;
+    width: calc(100% - 260px);
+}
+
+/* Ajustes para pantallas grandes */
+@media (min-width: 1440px) {
+    .main-content {
+        margin-left: 240px;
+        padding: 20px 40px;
+        width: calc(100% - 280px);
+    }
+}
+
+@media (min-width: 1920px) {
+    .main-content {
+        margin-left: 240px;
+        padding: 30px 60px;
+        width: calc(100% - 300px);
+    }
+}
+
+@media (min-width: 2560px) {
+    .main-content {
+        margin-left: 240px;
+        padding: 40px 80px;
+        width: calc(100% - 320px);
+    }
 }
 
 /* Header */
@@ -334,6 +405,23 @@ body {
 .content-block:hover {
     box-shadow: 0 0 30px rgba(255,102,0,0.5);
     transform: translateY(-5px);
+}
+
+/* Mejores espacios para pantallas grandes */
+@media (min-width: 1920px) {
+    .content-block {
+        padding: 40px 60px;
+        margin-bottom: 50px;
+        border-radius: 15px;
+    }
+}
+
+@media (min-width: 2560px) {
+    .content-block {
+        padding: 50px 80px;
+        margin-bottom: 60px;
+        border-radius: 20px;
+    }
 }
 
 .section-header {
