@@ -283,24 +283,42 @@ function triggerKonamiEasterEgg() {
     }
 }
 
-// Efectos de sonido
+// Efectos de sonido optimizados
 function initSoundEffects() {
     const clickSound = document.getElementById('click-sound');
     
-    // Sonido al hacer hover en botones
-    const buttons = document.querySelectorAll('button, .cta-btn, .nav-btn');
-    buttons.forEach(button => {
-        button.addEventListener('mouseenter', () => {
+    // Precargar el audio para reducir latencia
+    if (clickSound) {
+        clickSound.preload = 'auto';
+        clickSound.volume = 0.3;
+    }
+    
+    // Seleccionar TODOS los elementos clickeables
+    const clickableElements = document.querySelectorAll(`
+        button, 
+        .cta-btn, 
+        .nav-btn, 
+        .feature-card, 
+        .feature-item, 
+        .contribution-item,
+        .main-title,
+        a[href],
+        input[type="submit"],
+        .close-modal
+    `);
+    
+    // Agregar sonido a todos los elementos clickeables
+    clickableElements.forEach(element => {
+        // Sonido al hacer clic (sin hover para reducir ruido)
+        element.addEventListener('click', (e) => {
             playSound('click');
-        });
+        }, { passive: true });
+        
+        // Agregar clase para indicar que es clickeable
+        element.style.cursor = 'pointer';
     });
     
-    // Sonido al hacer clic
-    buttons.forEach(button => {
-        button.addEventListener('click', () => {
-            playSound('click');
-        });
-    });
+    console.log(`🔊 Sonido agregado a ${clickableElements.length} elementos`);
 }
 
 // Inicializar funcionalidad del modal GIF
@@ -445,15 +463,22 @@ function testModal() {
     showGifModal('images/fire-thank-you.gif', 'https://github.com/zatobox');
 }
 
-// Reproducir sonido
+// Reproducir sonido optimizado
 function playSound(type) {
     const audio = document.getElementById('click-sound');
     if (audio) {
+        // Resetear a 0 para permitir múltiples clicks rápidos
         audio.currentTime = 0;
-        audio.play().catch(e => {
-            // Ignorar errores de autoplay
-            console.log('Audio no reproducido:', e);
-        });
+        // Configurar volumen
+        audio.volume = 0.3;
+        // Reproducir inmediatamente
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(e => {
+                // Ignorar errores de autoplay en navegadores estrictos
+                console.log('Audio bloqueado por navegador:', e.message);
+            });
+        }
     }
 }
 
