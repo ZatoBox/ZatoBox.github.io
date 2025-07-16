@@ -1,10 +1,304 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🌟 ZatoBox - The Free Software Rebellion 🌟</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+</head>
 <body>
+    <!-- Animated star background -->
+    <div class="stars"></div>
+    <div class="matrix-bg"></div>
+    
+    <!-- Fake old-style navigator -->
+    <div class="fake-navigator">
+        <div class="nav-header">
+            <span class="nav-title">🌐 ZatoBox Navigator v1.0</span>
+        </div>
+        <div class="nav-buttons">
+            <button class="nav-btn">🏠</button>
+            <button class="nav-btn">⬅️</button>
+            <button class="nav-btn">➡️</button>
+            <button class="nav-btn">🔄</button>
+        </div>
+        <div class="nav-status">
+            <span class="status-text">Connecting to the rebellion...</span>
+            <div class="loading-bar"></div>
+        </div>
+    </div>
 
-<!-- This is a comment -->
-<p>This is a paragraph.</p>
-<!-- Comments are not displayed in the browser -->
+    <!-- Main content -->
+    <div class="main-content">
+        <!-- Header with blinking title -->
+        <header class="site-header">
+            <div class="glitch-container">
+                <img src="images/Frame 48095649 2.png" alt="ZatoBox Logo" class="main-title glitch" data-text="ZATOBOX">
+            </div>
+            <div class="subtitle">🚀 Decentralized Point of Sale for a New Economy 🚀</div>
+            <div class="mask-cash-register">
+                <img src="images/the-mask-jim-carrey.gif" alt="The Mask Cash Register" class="mask-image">
+            </div>
+            <div class="construction-banner">
+                🚧 UNDER CONSTRUCTION 🚧 | Last update: <span id="last-update">Loading...</span>
+            </div>
+        </header>
 
+        <!-- Section 1: Welcome -->
+        <section class="content-block welcome-section">
+            <div class="section-header">
+                <h2>🌟 WELCOME TO THE ZATOBOX UNIVERSE 🌟</h2>
+                <div class="pixel-planet">🌍</div>
+            </div>
+            <div class="content-text">
+                <p class="typing-text">Hello, digital traveler! You are at the frontier of free software and technological sovereignty.</p>
+                <p class="blink-text">🎯 ZatoBox is more than a cash register...</p>
+                <p class="glitch-text">It's your own open economic node! 💥</p>
+                <div class="pixel-art">
+                    <pre>
+    ╔══════════════════════════════════════╗
+    ║  ⚡ ZATOBOX v1.0 - LIGHTNING READY   ║
+    ║  🔓 OPEN SOURCE & MODULAR           ║
+    ║  ₿ BITCOIN-FIRST PHILOSOPHY         ║
+    ╚══════════════════════════════════════╝
+                    </pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: What is ZatoBox -->
+        <section class="content-block what-is-section">
+            <div class="section-header">
+                <h2>🤖 WHAT IS ZATOBOX?</h2>
+                <div class="robot-icon">🤖</div>
+            </div>
+            <div class="content-text">
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">⚡</div>
+                        <h3>Lightning POS</h3>
+                        <p>Instant payments with Bitcoin on the Lightning network. No borders, no banks.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🧠</div>
+                        <h3>Automated Inventory</h3>
+                        <p>OCR + smart analysis to enter and manage stock efficiently.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">📊</div>
+                        <h3>Advanced Reports</h3>
+                        <p>Dashboards with metrics, AI, and alerts for strategic decisions.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🔁</div>
+                        <h3>Total Integration</h3>
+                        <p>Sync with e-commerce, banks, microcredits, and suppliers from one place.</p>
+                    </div>
+                </div>
+                <div class="quote-box">
+                    <blockquote>
+                        "Decentralization is not the future... it's already the present."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Why we do it -->
+        <section class="content-block why-section">
+            <div class="section-header">
+                <h2>⚡ WHY DO WE DO IT?</h2>
+                <div class="lightning-icon">⚡</div>
+            </div>
+
+            <div class="mask-cash-register">
+                <img src="images/matrix-neo.gif" alt="The Mask Cash Register" class="mask-image">
+            </div>
+
+            <div class="content-text">
+                <div class="rebellion-manifesto">
+                    <h3>🎭 OUR MANIFESTO</h3>
+                    <ul class="manifesto-list">
+                        <li>✅ We believe in a peer-to-peer and sovereign economy</li>
+                        <li>✅ We promote accessible, local, and global tools</li>
+                        <li>✅ We foster open source collaboration</li>
+                        <li>✅ We are part of a movement: free software and free money</li>
+                    </ul>
+                </div>
+                <div class="hacker-quote">
+                    <p class="matrix-text">"Where there is open source, there is freedom."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: What we offer -->
+        <section class="content-block features-section">
+            <div class="section-header">
+                <h2>🎁 WHAT DO WE OFFER?</h2>
+                <div class="gift-icon">🎁</div>
+            </div>
+            <div class="content-text">
+                <div class="features-showcase">
+                    <div class="feature-card">
+                        <div class="card-header">💳 Crypto POS</div>
+                        <div class="card-content">
+                            <p>Accept payments in Bitcoin, Ethereum, Litecoin and more</p>
+                            <div class="crypto-icons">
+                                ₿ Ξ Ł ₿ Ξ Ł ₿ Ξ Ł
+                            </div>
+                        </div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="card-header">📊 Smart Inventory</div>
+                        <div class="card-content">
+                            <p>Stock control with AI and OCR</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="card-header">🌍 Global Community</div>
+                        <div class="card-content">
+                            <p>Developers from all over the world collaborating</p>
+                            <div class="world-map">🌍🌎🌏</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: How to collaborate -->
+        <section class="content-block collaborate-section">
+            <div class="section-header">
+                <h2>🤝 HOW TO COLLABORATE?</h2>
+                <div class="handshake-icon">🤝</div>
+            </div>
+            <div class="content-text">
+                <div class="guestbook">
+                    <h3>📖 GUESTBOOK - SIGN THE REBELLION</h3>
+                    <form class="guestbook-form">
+                        <div class="form-group">
+                            <label for="name">Your hacker name:</label>
+                            <input type="text" id="name" placeholder="Anonymous_Coward">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Your email (optional):</label>
+                            <input type="email" id="email" placeholder="hacker@zombie.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Your rebellious message:</label>
+                            <textarea id="message" placeholder="Free software or death!"></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">🚀 SEND MESSAGE</button>
+                    </form>
+                </div>
+                <div class="contribution-ways">
+                    <h3>🛠️ WAYS TO CONTRIBUTE</h3>
+                    <div class="contribution-list">
+                        <div class="contribution-item">💻 Coding</div>
+                        <div class="contribution-item">🐛 Report bugs</div>
+                        <div class="contribution-item">📖 Documentation</div>
+                        <div class="contribution-item">🌍 Translate</div>
+                        <div class="contribution-item">💡 Propose ideas</div>
+                        <div class="contribution-item">💰 Donate</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+        <!-- Section 6: Call to Action -->
+        <section class="content-block cta-section">
+            <div class="section-header">
+                <h2 class="blink-title">🚨 JOIN THE PROJECT 🚨</h2>
+            </div>
+            <div class="content-text">
+                <div class="cta-buttons">
+                    <a href="https://github.com/zatobox" class="cta-btn github-btn" target="_blank">
+                        <span class="btn-text">🐙 FORK ON GITHUB</span>
+                    </a>
+                    <a href="#" class="cta-btn discord-btn">
+                        <span class="btn-text">🎮 JOIN DISCORD</span>
+                    </a>
+                    <a href="#" class="cta-btn download-btn">
+                        <span class="btn-text">⬇️ DOWNLOAD ZATOBOX</span>
+                    </a>
+                    <!-- Temporary test button -->
+                    <button class="cta-btn test-btn" onclick="testModal()">
+                        <span class="btn-text">🧪 TEST MODAL</span>
+                    </button>
+                </div>
+                <div class="installation-guide">
+                    <h3>📋 QUICK INSTALLATION GUIDE</h3>
+                    <div class="code-block">
+                        <pre><code>git clone https://github.com/zatobox/zatobox.git
+cd zatobox
+npm install
+npm start
+# Done! The rebellion has begun 🚀</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="site-footer">
+            <div class="footer-content">
+                <div class="footer-text">
+                    <p>🌍 Made with ❤️ and free code by the global community</p>
+                    <p>📅 Last update: <span id="footer-date">Loading...</span></p>
+                    <p>👥 Visitors: <span id="visitor-count">1337</span> rebel hackers</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">📄 MIT License</a>
+                    <a href="#" class="footer-link">🐛 Report Bug</a>
+                    <a href="#" class="footer-link">📧 Contact</a>
+                </div>
+                <div class="footer-social">
+                    <a href="https://github.com/zatobox" class="social-link" target="_blank" title="GitHub">
+                        <span class="social-icon">🐙</span>
+                    </a>
+                    <a href="#" class="social-link" target="_blank" title="Discord">
+                        <span class="social-icon">🎮</span>
+                    </a>
+                    <a href="#" class="social-link" target="_blank" title="X (Twitter)">
+                        <span class="social-icon">𝕏</span>
+                    </a>
+                    <a href="#" class="social-link" target="_blank" title="TikTok">
+                        <span class="social-icon">🎵</span>
+                    </a>
+                    <a href="#" class="social-link" target="_blank" title="YouTube">
+                        <span class="social-icon">📺</span>
+                    </a>
+                    <a href="#" class="social-link" target="_blank" title="LinkedIn">
+                        <span class="social-icon">💼</span>
+                    </a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Easter eggs -->
+    <div class="easter-eggs">
+        <div class="dancing-cat" id="dancing-cat">🐱</div>
+        <div class="fireworks" id="fireworks">🎆</div>
+        <div class="vhs-tape" id="vhs-tape">📼</div>
+    </div>
+
+    <!-- Modal for GIF -->
+    <div id="gif-modal" class="gif-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <img id="modal-gif" src="" alt="Animated GIF" class="modal-gif">
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
-</html>
+</html> 
