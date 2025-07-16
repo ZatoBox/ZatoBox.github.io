@@ -1045,51 +1045,159 @@ function createInterferenceFlash() {
     const vhsScreen = document.getElementById('vhs-loading-screen');
     if (!vhsScreen) return;
     
-    // Crear efecto suave que muestra la web de manera opaca
-    const preview = document.createElement('div');
-    preview.style.cssText = `
+    // Crear efecto glitch que revela la página principal
+    const glitchReveal = document.createElement('div');
+    glitchReveal.style.cssText = `
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0,0,0,0.7);
-        z-index: 9999;
-        animation: gentle-interference 1s ease-out;
-        backdrop-filter: blur(2px);
-        border: 1px solid rgba(0,255,0,0.3);
+        background: rgba(0,0,0,0.2);
+        z-index: 9998;
+        animation: glitch-reveal 1.2s ease-out;
+        mix-blend-mode: multiply;
     `;
     
-    vhsScreen.appendChild(preview);
+    // Crear destello glitch
+    const glitchFlash = document.createElement('div');
+    glitchFlash.style.cssText = `
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            45deg,
+            transparent 30%, 
+            rgba(0,255,0,0.4) 50%, 
+            transparent 70%
+        );
+        z-index: 9999;
+        animation: glitch-flash 1.2s ease-out;
+        mix-blend-mode: screen;
+    `;
+    
+    // Crear líneas de interferencia horizontal
+    const scanLines = document.createElement('div');
+    scanLines.style.cssText = `
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: repeating-linear-gradient(
+            0deg,
+            transparent 0px,
+            rgba(255,255,255,0.1) 1px,
+            transparent 2px,
+            transparent 10px
+        );
+        z-index: 10000;
+        animation: scan-glitch 1.2s ease-out;
+        transform: translateX(-100%);
+    `;
+    
+    vhsScreen.appendChild(glitchReveal);
+    vhsScreen.appendChild(glitchFlash);
+    vhsScreen.appendChild(scanLines);
     
     setTimeout(() => {
-        preview.remove();
-    }, 1000);
+        glitchReveal.remove();
+        glitchFlash.remove();
+        scanLines.remove();
+    }, 1200);
     
     // Agregar CSS para la animación si no existe
     if (!document.querySelector('#interference-flash-css')) {
         const style = document.createElement('style');
         style.id = 'interference-flash-css';
         style.textContent = `
-            @keyframes gentle-interference {
+            @keyframes glitch-reveal {
                 0% { 
-                    opacity: 0; 
-                    transform: translateY(-10px);
+                    opacity: 1; 
+                    transform: translateX(0) scaleX(1);
                     background: rgba(0,0,0,1);
                 }
-                30% { 
-                    opacity: 0.8; 
-                    transform: translateY(0);
-                    background: rgba(0,0,0,0.6);
-                }
-                70% { 
+                15% { 
                     opacity: 0.6; 
-                    background: rgba(0,0,0,0.7);
+                    transform: translateX(-2px) scaleX(0.98);
+                    background: rgba(0,0,0,0.4);
+                }
+                30% { 
+                    opacity: 0.2; 
+                    transform: translateX(1px) scaleX(1.01);
+                    background: rgba(0,0,0,0.1);
+                }
+                45% { 
+                    opacity: 0.1; 
+                    transform: translateX(-1px) scaleX(0.99);
+                    background: rgba(0,0,0,0.05);
+                }
+                60% { 
+                    opacity: 0.3; 
+                    transform: translateX(0) scaleX(1);
+                    background: rgba(0,0,0,0.2);
+                }
+                85% { 
+                    opacity: 0.7; 
+                    transform: translateX(1px) scaleX(1.005);
+                    background: rgba(0,0,0,0.5);
+                }
+                100% { 
+                    opacity: 1; 
+                    transform: translateX(0) scaleX(1);
+                    background: rgba(0,0,0,1);
+                }
+            }
+            
+            @keyframes glitch-flash {
+                0% { 
+                    opacity: 0; 
+                    transform: translateX(-100%) rotate(0deg);
+                }
+                20% { 
+                    opacity: 0.6; 
+                    transform: translateX(-20%) rotate(1deg);
+                }
+                40% { 
+                    opacity: 0.8; 
+                    transform: translateX(30%) rotate(-0.5deg);
+                }
+                60% { 
+                    opacity: 0.4; 
+                    transform: translateX(80%) rotate(0.5deg);
+                }
+                80% { 
+                    opacity: 0.2; 
+                    transform: translateX(120%) rotate(0deg);
                 }
                 100% { 
                     opacity: 0; 
-                    transform: translateY(10px);
-                    background: rgba(0,0,0,1);
+                    transform: translateX(150%) rotate(0deg);
+                }
+            }
+            
+            @keyframes scan-glitch {
+                0% { 
+                    opacity: 0; 
+                    transform: translateX(-100%) translateY(0);
+                }
+                25% { 
+                    opacity: 0.7; 
+                    transform: translateX(-50%) translateY(-2px);
+                }
+                50% { 
+                    opacity: 0.9; 
+                    transform: translateX(0%) translateY(0);
+                }
+                75% { 
+                    opacity: 0.5; 
+                    transform: translateX(50%) translateY(1px);
+                }
+                100% { 
+                    opacity: 0; 
+                    transform: translateX(100%) translateY(0);
                 }
             }
             
