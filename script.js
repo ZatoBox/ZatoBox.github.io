@@ -547,6 +547,8 @@ function toggleMusic() {
     // Si la música no tiene src, cargarla primero
     if (!backgroundMusic.src || backgroundMusic.src === window.location.href) {
         backgroundMusic.src = 'sounds/Lost in the Matrix.mp3';
+        backgroundMusic.volume = 0.6;
+        backgroundMusic.loop = true;
         console.log('🎵 Música cargada bajo demanda');
     }
     
@@ -592,28 +594,6 @@ function initBackgroundMusic() {
             backgroundMusic.src = 'sounds/Lost in the Matrix.mp3';
             musicLoaded = true;
             console.log('🎵 Música cargada bajo demanda');
-        }
-    }
-    
-    // Función para alternar música
-    function toggleMusic() {
-        if (!musicLoaded) {
-            loadMusic();
-        }
-        
-        if (backgroundMusic.paused) {
-            backgroundMusic.play().then(() => {
-                console.log('🎵 Música iniciada');
-                if (musicBtn) musicBtn.textContent = '⏸️';
-                if (mobileMusicBtn) mobileMusicBtn.textContent = '⏸️';
-            }).catch(error => {
-                console.error('❌ Error al reproducir música:', error);
-            });
-        } else {
-            backgroundMusic.pause();
-            console.log('🎵 Música pausada');
-            if (musicBtn) musicBtn.textContent = '🎵';
-            if (mobileMusicBtn) mobileMusicBtn.textContent = '🎵';
         }
     }
     
