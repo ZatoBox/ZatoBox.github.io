@@ -26,7 +26,7 @@
             </div>
         </div>
         <div class="vhs-timestamp">
-            <span id="vhs-timer">LOADING... 00:14</span>
+            <span id="vhs-timer">LOADING... 00:05</span>
         </div>
     </div>
 
@@ -37,57 +37,53 @@
     <!-- Contenedor principal centrado -->
     <div class="page-wrapper">
     
-    <!-- Navigator para Desktop -->
-    <div class="fake-navigator desktop-nav">
-        <div class="nav-header">
-            <span class="nav-title">🌐 ZatoBox Navigator v1.0</span>
+    <!-- Control Panel para Desktop -->
+    <div class="desktop-control-panel">
+        <div class="control-panel-header">
+            <span class="control-panel-title">🌐 ZatoBox Control Panel v1.0</span>
         </div>
-        <div class="nav-buttons">
-            <button class="nav-btn">🏠</button>
-            <button class="nav-btn">⬅️</button>
-            <button class="nav-btn">➡️</button>
-            <button class="nav-btn">🔄</button>
-        </div>
-        <div class="nav-status">
-            <span class="status-text">Connecting to the rebellion...</span>
-            <div class="loading-bar"></div>
+        <div class="control-panel-buttons">
+            <button class="control-btn" id="homeBtn" title="Go to Home">🏠</button>
+            <button class="control-btn" id="backBtn" title="Go Back">⬅️</button>
+            <button class="control-btn" id="forwardBtn" title="Go Forward">➡️</button>
+            <button class="control-btn alcolabs-btn" id="alcolabsBtn" title="Discover Alcolabs">
+                <img src="images/Alcolabs.png" alt="Alcolabs Logo" class="alcolabs-icon">
+            </button>
+            <button class="control-btn music-btn" id="musicBtn" title="Pause/Play music">🎵</button>
         </div>
     </div>
 
-    <!-- Navigator compacto para Mobile/Tablet -->
-    <div class="mobile-navigator">
-        <div class="mobile-nav-header">
-            <span class="mobile-nav-title">🚀 ZatoBox</span>
-            <button class="mobile-menu-toggle">☰</button>
+    <!-- Control Panel compacto para Mobile/Tablet -->
+    <div class="mobile-control-panel">
+        <div class="mobile-control-header">
+            <span class="mobile-control-title">🌐 ZatoBox v1.0</span>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">☰</button>
         </div>
-        <div class="mobile-nav-content">
-            <div class="mobile-nav-buttons">
-                <button class="mobile-nav-btn" data-action="home">🏠 Inicio</button>
-                <button class="mobile-nav-btn" data-action="back">⬅️ Atrás</button>
-                <button class="mobile-nav-btn" data-action="forward">➡️ Adelante</button>
-                <button class="mobile-nav-btn" data-action="reload">🔄 Recargar</button>
-            </div>
-            <div class="mobile-nav-status">
-                <span class="mobile-status-text">Rebelión activa...</span>
-                <div class="mobile-progress-bar">
-                    <div class="mobile-progress-fill"></div>
-                </div>
+        <div class="mobile-control-content">
+            <div class="mobile-control-buttons">
+                <button class="mobile-control-btn" id="mobileHomeBtn" title="Go to Home">🏠</button>
+                <button class="mobile-control-btn" id="mobileBackBtn" title="Go Back">⬅️</button>
+                <button class="mobile-control-btn" id="mobileForwardBtn" title="Go Forward">➡️</button>
+                <button class="mobile-control-btn alcolabs-btn" id="mobileAlcolabsBtn" title="Discover Alcolabs">
+                    <img src="images/Alcolabs.png" alt="Alcolabs Logo" class="alcolabs-icon">
+                </button>
+                <button class="mobile-control-btn music-btn" id="mobileMusicBtn" title="Pause/Play music">🎵</button>
             </div>
         </div>
     </div>
 
     <!-- Main content -->
     <div class="main-content">
-        <!-- Header with blinking title -->
+        <!-- Header con título animado -->
         <header class="site-header">
-            <div class="glitch-container">
-                <img id="zatobox-logo" src="images/Frame 48095649 2.png" alt="ZatoBox Logo" class="main-title glitch" data-text="ZATOBOX">
+            <div class="logo-container">
+                <img id="zatobox-logo" src="images/Frame 48095649 2.png" alt="ZatoBox Logo" class="site-logo glitch" data-text="ZATOBOX">
             </div>
             <div class="subtitle">🚀 Decentralized Point of Sale for a New Economy 🚀</div>
-            <div class="mask-cash-register">
-                <img src="images/the-mask-jim-carrey.gif" alt="The Mask Cash Register" class="mask-image">
+            <div class="hero-image-container">
+                <img src="images/the-mask-jim-carrey.gif" alt="The Mask Cash Register" class="hero-image">
             </div>
-            <div class="construction-banner">
+            <div class="status-banner">
                 🚧 UNDER CONSTRUCTION 🚧 | Last update: <span id="last-update">Loading...</span>
             </div>
         </header>
@@ -99,10 +95,10 @@
                 <div class="pixel-planet">🌍</div>
             </div>
             <div class="content-text">
-                <p class="typing-text">Hello, digital traveler! You are at the frontier of free software and technological sovereignty.</p>
-                <p class="blink-text">🎯 ZatoBox is more than a cash register...</p>
-                <p class="glitch-text">It's your own open economic node! 💥</p>
-                <div class="pixel-art">
+                <p class="animated-text">Hello, digital traveler! You are at the frontier of free software and technological sovereignty.</p>
+                <p class="pulsing-text">🎯 ZatoBox is more than a cash register...</p>
+                <p class="distorted-text">It's your own open economic node! 💥</p>
+                <div class="ascii-art">
                     <pre>
     ╔══════════════════════════════════════╗
     ║  ⚡ ZATOBOX v1.0 - LIGHTNING READY   ║
@@ -158,8 +154,8 @@
                 <div class="lightning-icon">⚡</div>
             </div>
 
-            <div class="mask-cash-register">
-                <img src="images/matrix-neo.gif" alt="The Mask Cash Register" class="mask-image">
+            <div class="hero-image-container">
+                <img src="images/matrix-neo.gif" alt="Neo from Matrix" class="hero-image">
             </div>
 
             <div class="content-text">
@@ -186,29 +182,31 @@
             </div>
             <div class="content-text">
                 <div class="features-showcase">
-                    <div class="feature-card">
+                    <div class="feature-card feature-card-with-tooltip" data-tooltip="Ready to revolutionize payments? Bitcoin, Lightning, and beyond... The future of commerce is here." onclick="scrollToJoinSection()">
                         <div class="card-header">💳 Crypto POS</div>
                         <div class="card-content">
-                            <p>Accept payments in Bitcoin, Ethereum, Litecoin and more</p>
-                            <div class="crypto-icons">
-                                ₿ Ξ Ł ₿ Ξ Ł ₿ Ξ Ł
+                            <p>Accept payments in Bitcoin, Lightning network and more</p>
+                            <div class="feature-gif-container">
+                                <img src="images/bitcoin-zero.gif" alt="Bitcoin Zero" class="feature-gif">
                             </div>
                         </div>
                     </div>
-                    <div class="feature-card">
+                    <div class="feature-card feature-card-with-tooltip" data-tooltip="AI-powered inventory management with OCR technology. Never waste time organizing and updating digital inventory again!" onclick="scrollToJoinSection()">
                         <div class="card-header">📊 Smart Inventory</div>
                         <div class="card-content">
                             <p>Stock control with AI and OCR</p>
-                            <div class="progress-bar">
-                                <div class="progress-fill"></div>
+                            <div class="feature-gif-container">
+                                <img src="images/fadding-smart.gif" alt="Smart Inventory" class="feature-gif">
                             </div>
                         </div>
                     </div>
-                    <div class="feature-card">
+                    <div class="feature-card feature-card-with-tooltip global-community-card" data-tooltip="Not seeing many people? Relax, we're just starting the conspiracy... Join before it gets cool." onclick="scrollToJoinSection()">
                         <div class="card-header">🌍 Global Community</div>
                         <div class="card-content">
                             <p>Developers from all over the world collaborating</p>
-                            <div class="world-map">🌍🌎🌏</div>
+                            <div class="feature-gif-container">
+                                <img src="images/comunity.gif" alt="Global Community" class="feature-gif">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -338,10 +336,35 @@ npm start
     <div id="gif-modal" class="gif-modal">
         <div class="modal-content">
             <div class="modal-header">
+                <h2>🎬 GIF Preview</h2>
                 <span class="close-modal">&times;</span>
             </div>
             <div class="modal-body">
                 <img id="modal-gif" src="" alt="Animated GIF" class="modal-gif">
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Alcolabs -->
+    <div id="alcolabs-modal" class="alcolabs-modal">
+        <div class="alcolabs-modal-content">
+            <div class="alcolabs-modal-header">
+                <span class="close-alcolabs-modal">&times;</span>
+            </div>
+            <div class="alcolabs-modal-body">
+                <div class="alcolabs-message">
+                    <h2>🎭 The Other Face</h2>
+                    <p class="alcolabs-text">"Crypto is just the beginning.<br>Behind the chaos lies structure.<br>ZatoBox reveals its other face: <strong>Alcolabs</strong>."</p>
+                </div>
+                <div class="alcolabs-gif-container">
+                    <img src="images/kevin-spacey-mask.gif" alt="Kevin Spacey Mask Reveal" class="alcolabs-gif">
+                </div>
+                <div class="alcolabs-redirect">
+                    <p>Redirecting to Alcolabs in <span id="redirect-countdown">5</span> seconds...</p>
+                    <a href="https://google.com" id="alcolabs-link" target="_blank" style="display: none;">
+                        <button class="alcolabs-redirect-btn">🌐 GO TO ALCOLABS</button>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -350,6 +373,7 @@ npm start
 
     <!-- Sonido de click optimizado -->
     <audio id="click-sound" src="sounds/click.mp3" preload="auto" volume="0.3"></audio>
+        <audio id="background-music" src="sounds/Lost in the Matrix.mp3" preload="auto" volume="0.6" loop></audio>
 
     <script src="script.js"></script>
 </body>

@@ -56,21 +56,21 @@ function initEasterEggs() {
     const vhsTape = document.getElementById('vhs-tape');
     
     // Gato bailando - aparece al hacer clic en el título
-    const mainTitle = document.querySelector('.main-title');
-    mainTitle.addEventListener('click', () => {
+    const siteLogo = document.querySelector('.site-logo');
+    siteLogo.addEventListener('click', () => {
         showEasterEgg(dancingCat, 3000);
         playSound('click');
     });
     
-    // Funcionalidad de los botones del navigator (desktop y mobile)
-    const navButtons = document.querySelectorAll('.nav-btn');
-    const mobileNavButtons = document.querySelectorAll('.mobile-nav-btn');
+    // Funcionalidad de los botones del panel de control (desktop y mobile)
+    const controlButtons = document.querySelectorAll('.control-btn');
+    const mobileControlButtons = document.querySelectorAll('.mobile-control-btn');
     const statusText = document.querySelector('.status-text');
     const mobileStatusText = document.querySelector('.mobile-status-text');
     const loadingBar = document.querySelector('.loading-bar');
     
-    // Inicializar navegador móvil
-    initMobileNavigator();
+    // Inicializar panel de control móvil
+    initMobileControlPanel();
     
     // Estado del navigator - navegación por secciones
     const sections = [
@@ -83,8 +83,8 @@ function initEasterEggs() {
     ];
     let currentSectionIndex = 0;
     
-    // Configurar navegador desktop con nueva funcionalidad
-    navButtons.forEach((button, index) => {
+    // Configurar panel de control desktop con nueva funcionalidad
+    controlButtons.forEach((button, index) => {
         button.addEventListener('click', () => {
             playSound('click');
             
@@ -137,39 +137,138 @@ function initEasterEggs() {
     });
 }
 
-// Inicializar navegador móvil
-function initMobileNavigator() {
+// Inicializar panel de control móvil
+function initMobileControlPanel() {
+    // Prevenir inicialización múltiple
+    if (window.mobilePanelInitialized) {
+        console.log('📱 Panel móvil ya inicializado, saltando...');
+        return;
+    }
+    
+    console.log('📱 Inicializando panel de control móvil...');
+    
     const mobileToggle = document.querySelector('.mobile-menu-toggle');
-    const mobileContent = document.querySelector('.mobile-nav-content');
-    const mobileNavButtons = document.querySelectorAll('.mobile-nav-btn');
+    const mobileContent = document.querySelector('.mobile-control-content');
     const mobileStatusText = document.querySelector('.mobile-status-text');
     
-    // Toggle del menú móvil
+    // Botones móviles específicos
+    const mobileHomeBtn = document.getElementById('mobileHomeBtn');
+    const mobileBackBtn = document.getElementById('mobileBackBtn');
+    const mobileForwardBtn = document.getElementById('mobileForwardBtn');
+    const mobileAlcolabsBtn = document.getElementById('mobileAlcolabsBtn');
+    const mobileMusicBtn = document.getElementById('mobileMusicBtn');
+    
+    // Toggle del menú móvil - Prevenir múltiples event listeners
     if (mobileToggle && mobileContent) {
-        mobileToggle.addEventListener('click', () => {
-            playSound('click');
-            mobileContent.classList.toggle('active');
+        // Remover event listeners anteriores si existen
+        mobileToggle.removeEventListener('click', mobileToggle.toggleHandler);
+        
+        // Crear handler único
+        mobileToggle.toggleHandler = function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             
-            // Cambiar icono del toggle
-            mobileToggle.textContent = mobileContent.classList.contains('active') ? '✕' : '☰';
+            console.log('📱 Clic en toggle móvil');
+            playSound('click');
+            
+            // Toggle del estado activo
+            const isActive = mobileContent.classList.contains('active');
+            console.log('📱 Estado actual:', isActive ? 'abierto' : 'cerrado');
+            
+            if (isActive) {
+                // Cerrar el panel
+                mobileContent.classList.remove('active');
+                mobileToggle.textContent = '☰';
+                console.log('📱 Panel cerrado');
+            } else {
+                // Abrir el panel
+                mobileContent.classList.add('active');
+                mobileToggle.textContent = '✕';
+                console.log('📱 Panel abierto');
+            }
+        };
+        
+        // Agregar event listener
+        mobileToggle.addEventListener('click', mobileToggle.toggleHandler);
+        
+        // Asegurar estado inicial
+        mobileContent.classList.remove('active');
+        mobileToggle.textContent = '☰';
+        console.log('📱 Estado inicial del panel móvil: cerrado');
+    }
+    
+    // Funcionalidad de botones móviles - misma lógica que desktop
+    if (mobileHomeBtn) {
+        mobileHomeBtn.addEventListener('click', () => {
+            console.log('🏠 Navegando a home (móvil)...');
+            playSound('click');
+            handleDesktopNavigation('home');
+            
+            // Efecto visual
+            mobileHomeBtn.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                mobileHomeBtn.style.transform = 'scale(1)';
+            }, 150);
         });
     }
     
-    // Funcionalidad de botones móviles
-    mobileNavButtons.forEach(button => {
-        button.addEventListener('click', () => {
+    if (mobileBackBtn) {
+        mobileBackBtn.addEventListener('click', () => {
+            console.log('⬅️ Navegando atrás (móvil)...');
             playSound('click');
-            
-            const action = button.getAttribute('data-action');
-            handleNavigationAction(action, mobileStatusText);
+            handleDesktopNavigation('back');
             
             // Efecto visual
-            button.style.transform = 'scale(0.95)';
+            mobileBackBtn.style.transform = 'scale(0.95)';
             setTimeout(() => {
-                button.style.transform = 'scale(1)';
+                mobileBackBtn.style.transform = 'scale(1)';
             }, 150);
         });
-    });
+    }
+    
+    if (mobileForwardBtn) {
+        mobileForwardBtn.addEventListener('click', () => {
+            console.log('➡️ Navegando adelante (móvil)...');
+            playSound('click');
+            handleDesktopNavigation('forward');
+            
+            // Efecto visual
+            mobileForwardBtn.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                mobileForwardBtn.style.transform = 'scale(1)';
+            }, 150);
+        });
+    }
+    
+    if (mobileAlcolabsBtn) {
+        mobileAlcolabsBtn.addEventListener('click', () => {
+            console.log('🎭 Abriendo modal de Alcolabs (móvil)...');
+            playSound('click');
+            showAlcolabsModal();
+            
+            // Efecto visual
+            mobileAlcolabsBtn.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                mobileAlcolabsBtn.style.transform = 'scale(1)';
+            }, 150);
+        });
+    }
+    
+    if (mobileMusicBtn) {
+        mobileMusicBtn.addEventListener('click', () => {
+            console.log('🎵 Toggle música (móvil)...');
+            playSound('click');
+            toggleMusic();
+            
+            // Efecto visual
+            mobileMusicBtn.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                mobileMusicBtn.style.transform = 'scale(1)';
+            }, 150);
+        });
+    }
+    
+    console.log('✅ Panel de control móvil inicializado');
 }
 
 // Función común para manejar navegación (desktop y mobile)
@@ -189,12 +288,12 @@ function handleNavigationAction(action, statusElement) {
     
     switch(action) {
         case 'home':
-            statusElement.textContent = 'Navegando a inicio...';
+            statusElement.textContent = 'Navigating to home...';
             window.scrollTo({ top: 0, behavior: 'smooth' });
             window.currentSectionIndex = 0;
             
             setTimeout(() => {
-                statusElement.textContent = 'Inicio cargado ✅';
+                statusElement.textContent = 'Home loaded ✅';
             }, 500);
             break;
             
@@ -202,7 +301,7 @@ function handleNavigationAction(action, statusElement) {
             if (window.currentSectionIndex > 0) {
                 window.currentSectionIndex--;
                 const section = sections[window.currentSectionIndex];
-                statusElement.textContent = 'Navegando atrás...';
+                statusElement.textContent = 'Navigating back...';
                 
                 const sectionElement = document.querySelector(section.selector);
                 if (sectionElement) {
@@ -213,9 +312,11 @@ function handleNavigationAction(action, statusElement) {
                     statusElement.textContent = `📍 ${section.title}`;
                 }, 500);
             } else {
-                statusElement.textContent = '⚠️ Primera sección';
+                statusElement.textContent = '⚠️ First section';
                 setTimeout(() => {
-                    statusElement.textContent = 'Rebelión activa...';
+                    if (statusElement) {
+                        statusElement.textContent = 'Active rebellion...';
+                    }
                 }, 2000);
             }
             break;
@@ -224,7 +325,7 @@ function handleNavigationAction(action, statusElement) {
             if (window.currentSectionIndex < sections.length - 1) {
                 window.currentSectionIndex++;
                 const section = sections[window.currentSectionIndex];
-                statusElement.textContent = 'Navegando adelante...';
+                statusElement.textContent = 'Navigating forward...';
                 
                 const sectionElement = document.querySelector(section.selector);
                 if (sectionElement) {
@@ -235,15 +336,17 @@ function handleNavigationAction(action, statusElement) {
                     statusElement.textContent = `📍 ${section.title}`;
                 }, 500);
             } else {
-                statusElement.textContent = '⚠️ Última sección';
+                statusElement.textContent = '⚠️ Last section';
                 setTimeout(() => {
-                    statusElement.textContent = 'Rebelión activa...';
+                    if (statusElement) {
+                        statusElement.textContent = 'Active rebellion...';
+                    }
                 }, 2000);
             }
             break;
             
         case 'reload':
-            statusElement.textContent = 'Recargando rebelión...';
+            statusElement.textContent = 'Reloading rebellion...';
             
             // Efecto visual de recarga
             const contentBlocks = document.querySelectorAll('.content-block');
@@ -260,10 +363,14 @@ function handleNavigationAction(action, statusElement) {
             updateVisitorCount();
             
             setTimeout(() => {
-                statusElement.textContent = '⚡ Recargado exitosamente';
-                setTimeout(() => {
-                    statusElement.textContent = 'Rebelión activa...';
-                }, 2000);
+                if (statusElement) {
+                    statusElement.textContent = '⚡ Successfully reloaded';
+                    setTimeout(() => {
+                        if (statusElement) {
+                            statusElement.textContent = 'Active rebellion...';
+                        }
+                    }, 2000);
+                }
             }, 800);
             break;
     }
@@ -334,8 +441,13 @@ function triggerKonamiEasterEgg() {
 }
 
 // Efectos de sonido optimizados
+// Variables globales para la música
+let backgroundMusic, musicBtn, musicPlaying = false;
+
 function initSoundEffects() {
     const clickSound = document.getElementById('click-sound');
+    backgroundMusic = document.getElementById('background-music');
+    musicBtn = document.getElementById('musicBtn');
     
     // Precargar el audio para reducir latencia
     if (clickSound) {
@@ -343,17 +455,41 @@ function initSoundEffects() {
         clickSound.volume = 0.3;
     }
     
+    // Configurar música de fondo
+    if (backgroundMusic) {
+        backgroundMusic.preload = 'auto';
+        backgroundMusic.volume = 0.6; // 60% del volumen
+        backgroundMusic.loop = true;
+    }
+    
+    // Configurar botón de música desktop
+    if (musicBtn) {
+        musicBtn.addEventListener('click', toggleMusic);
+        // Inicializar icono del botón
+        musicBtn.innerHTML = '🔇';
+        musicBtn.title = 'Play/Pause music';
+    }
+    
+    // Configurar botón de música móvil
+    const mobileMusicBtn = document.getElementById('mobileMusicBtn');
+    if (mobileMusicBtn) {
+        mobileMusicBtn.addEventListener('click', toggleMusic);
+        // Inicializar icono del botón móvil
+        mobileMusicBtn.innerHTML = '🔇';
+        mobileMusicBtn.title = 'Play/Pause music';
+    }
+    
     // Seleccionar TODOS los elementos clickeables (desktop y mobile)
     const clickableElements = document.querySelectorAll(`
         button, 
         .cta-btn, 
-        .nav-btn,
-        .mobile-nav-btn,
+        .control-btn,
+        .mobile-control-btn,
         .mobile-menu-toggle,
         .feature-card, 
         .feature-item, 
         .contribution-item,
-        .main-title,
+        .site-logo,
         a[href],
         input[type="submit"],
         .close-modal
@@ -374,6 +510,183 @@ function initSoundEffects() {
 }
 
 // Inicializar funcionalidad del modal GIF
+// Función para controlar la música de fondo
+function toggleMusic() {
+    if (!backgroundMusic) return;
+    
+    if (musicPlaying) {
+        backgroundMusic.pause();
+        // Actualizar ambos botones (desktop y móvil)
+        if (musicBtn) {
+            musicBtn.innerHTML = '🔇';
+            musicBtn.title = 'Play music';
+        }
+        const mobileMusicBtn = document.getElementById('mobileMusicBtn');
+        if (mobileMusicBtn) {
+            mobileMusicBtn.innerHTML = '🔇';
+            mobileMusicBtn.title = 'Play music';
+        }
+        musicPlaying = false;
+        console.log('🎵 Music paused (current volume:', backgroundMusic.volume.toFixed(2) + ')');
+    } else {
+        const playPromise = backgroundMusic.play();
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                // Actualizar ambos botones (desktop y móvil)
+                if (musicBtn) {
+                    musicBtn.innerHTML = '🎵';
+                    musicBtn.title = 'Pause music';
+                }
+                const mobileMusicBtn = document.getElementById('mobileMusicBtn');
+                if (mobileMusicBtn) {
+                    mobileMusicBtn.innerHTML = '🎵';
+                    mobileMusicBtn.title = 'Pause music';
+                }
+                musicPlaying = true;
+                console.log('🎵 Music resumed (current volume:', backgroundMusic.volume.toFixed(2) + ')');
+            }).catch(error => {
+                console.log("Error playing music:", error);
+            });
+        }
+    }
+}
+
+// Función para inicializar la música de fondo desde la pantalla VHS
+function initBackgroundMusic() {
+    // Inicializar efectos de sonido si no se ha hecho
+    if (!backgroundMusic) {
+        initSoundEffects();
+    }
+    
+    if (backgroundMusic) {
+        console.log('🎵 Iniciando Lost in the Matrix desde pantalla VHS...');
+        backgroundMusic.volume = 0.6; // 60% del volumen inicial
+        
+        const playPromise = backgroundMusic.play();
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                musicPlaying = true;
+                if (musicBtn) {
+                    musicBtn.innerHTML = '🎵';
+                    musicBtn.title = 'Pause music';
+                }
+                const mobileMusicBtn = document.getElementById('mobileMusicBtn');
+                if (mobileMusicBtn) {
+                    mobileMusicBtn.innerHTML = '🎵';
+                    mobileMusicBtn.title = 'Pause music';
+                }
+                console.log("🎵 Lost in the Matrix playing at 60% volume");
+                
+                // Iniciar degradado de volumen después de 2 segundos
+                setTimeout(() => {
+                    startVolumeFade();
+                }, 2000);
+                
+            }).catch(error => {
+                console.log("⚠️ Autoplay blocked, music will start with first interaction");
+                if (musicBtn) {
+                    musicBtn.innerHTML = '🔇';
+                    musicBtn.title = 'Play music';
+                }
+                const mobileMusicBtn = document.getElementById('mobileMusicBtn');
+                if (mobileMusicBtn) {
+                    mobileMusicBtn.innerHTML = '🔇';
+                    mobileMusicBtn.title = 'Play music';
+                }
+                musicPlaying = false;
+                
+                // Fallback: iniciar música con primera interacción del usuario
+                document.addEventListener('click', function startMusicOnFirstClick() {
+                    if (!musicPlaying) {
+                        backgroundMusic.play().then(() => {
+                            musicPlaying = true;
+                            if (musicBtn) {
+                                musicBtn.innerHTML = '🎵';
+                                musicBtn.title = 'Pause music';
+                            }
+                            const mobileMusicBtn = document.getElementById('mobileMusicBtn');
+                            if (mobileMusicBtn) {
+                                mobileMusicBtn.innerHTML = '🎵';
+                                mobileMusicBtn.title = 'Pause music';
+                            }
+                            console.log("🎵 Lost in the Matrix started by user interaction");
+                            
+                            // Iniciar degradado de volumen después de 2 segundos
+                            setTimeout(() => {
+                                startVolumeFade();
+                            }, 2000);
+                        });
+                        document.removeEventListener('click', startMusicOnFirstClick);
+                    }
+                }, { once: true });
+            });
+        }
+    }
+}
+
+// Función para crear degradado suave del volumen
+function startVolumeFade() {
+    if (!backgroundMusic || !musicPlaying) return;
+    
+    console.log('🎵 Starting volume fade: 60% → 40% in 20 seconds');
+    
+    const startVolume = 0.6; // 60%
+    const endVolume = 0.4;   // 40%
+    const fadeDuration = 20000; // 20 segundos
+    const fadeSteps = 200; // 200 pasos para transición suave
+    const stepDuration = fadeDuration / fadeSteps;
+    
+    let currentStep = 0;
+    
+    const fadeInterval = setInterval(() => {
+        currentStep++;
+        
+        // Calcular volumen actual usando función de suavizado
+        const progress = currentStep / fadeSteps;
+        const currentVolume = startVolume - (startVolume - endVolume) * progress;
+        
+        backgroundMusic.volume = currentVolume;
+        
+        if (currentStep >= fadeSteps) {
+            clearInterval(fadeInterval);
+            console.log('🎵 Volume fade completed: now at 40% (background music)');
+        }
+    }, stepDuration);
+}
+
+// Función para iniciar la música automáticamente
+function startBackgroundMusic() {
+    if (backgroundMusic) {
+        // Iniciar música inmediatamente cuando se abre la página
+        const playPromise = backgroundMusic.play();
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                musicPlaying = true;
+                musicBtn.innerHTML = '🎵';
+                musicBtn.title = 'Pausar música';
+                console.log("Música de fondo iniciada");
+            }).catch(error => {
+                console.log("Autoplay bloqueado, usuario debe iniciar música manualmente");
+                musicBtn.innerHTML = '🔇';
+                musicBtn.title = 'Reproducir música';
+                musicPlaying = false;
+                
+                // Si el autoplay falla, permitir al usuario iniciar con cualquier interacción
+                document.addEventListener('click', function startMusicOnInteraction() {
+                    if (!musicPlaying) {
+                        backgroundMusic.play().then(() => {
+                            musicPlaying = true;
+                            musicBtn.innerHTML = '🎵';
+                            musicBtn.title = 'Pausar música';
+                        });
+                        document.removeEventListener('click', startMusicOnInteraction);
+                    }
+                }, { once: true });
+            });
+        }
+    }
+}
+
 function initGifModal() {
     console.log('🔧 Inicializando modal GIF...');
     
@@ -429,7 +742,8 @@ function initGifModal() {
         
         // Cerrar modal con X
         closeModal.addEventListener('click', () => {
-            console.log('❌ Cerrando modal con X');
+            console.log('❌ Cerrando modal GIF con X');
+            playSound('click');
             hideGifModal();
         });
         
@@ -971,6 +1285,9 @@ Easter eggs disponibles:
 function initVHSLoadingScreen() {
     console.log('📺 Iniciando pantalla VHS retro...');
     
+    // Inicializar música de fondo inmediatamente
+    initBackgroundMusic();
+    
     const vhsScreen = document.getElementById('vhs-loading-screen');
     const timerElement = document.getElementById('vhs-timer');
     
@@ -980,7 +1297,7 @@ function initVHSLoadingScreen() {
         return;
     }
     
-    let timeLeft = 14;
+    let timeLeft = 5;
     let interferenceCounter = 0;
     
     // Actualizar timer cada segundo
@@ -995,7 +1312,7 @@ function initVHSLoadingScreen() {
         }
     }, 1000);
     
-    // Interferencias cada 2 segundos (leves que dejan ver la pantalla)
+    // Interferencias cada 1 segundo (más frecuentes para 5 segundos)
     const interferenceInterval = setInterval(() => {
         interferenceCounter++;
         console.log(`📺 Interferencia ${interferenceCounter} - señal temporal clara`);
@@ -1003,12 +1320,12 @@ function initVHSLoadingScreen() {
         // Crear efecto de interferencia que revela la pantalla
         createInterferenceFlash();
         
-        if (interferenceCounter >= 7) { // 14 segundos / 2 = 7 interferencias
+        if (interferenceCounter >= 4) { // 5 segundos / 1.25 = 4 interferencias
             clearInterval(interferenceInterval);
         }
-    }, 2000);
+    }, 1250);
     
-    // Finalizar pantalla VHS después de 14 segundos
+    // Finalizar pantalla VHS después de 5 segundos
     setTimeout(() => {
         console.log('📺 Finalizando pantalla VHS - iniciando contenido principal');
         
@@ -1019,7 +1336,13 @@ function initVHSLoadingScreen() {
             vhsScreen.style.display = 'none';
             initMainContent();
         }, 1000);
-    }, 14000);
+    }, 5000);
+    
+    // Inicializar funcionalidad de Alcolabs
+    initAlcolabsModal();
+    
+    // Inicializar botones del navegador desktop
+    initDesktopNavigator();
     
     // Permitir saltar la pantalla presionando cualquier tecla
     const skipHandler = (e) => {
@@ -1235,6 +1558,7 @@ function initMainContent() {
     initEffects();
     initEasterEggs();
     initSoundEffects();
+    startBackgroundMusic();
     initAnimations();
     initGifModal();
     updateTimestamps();
@@ -1243,4 +1567,320 @@ function initMainContent() {
     updateVisitorCount();
     
     console.log('✅ Contenido principal cargado completamente');
-} 
+}
+
+// ================================
+// FUNCIONALIDAD DE ALCOLABS
+// ================================
+
+function initAlcolabsModal() {
+    console.log('🎭 Inicializando modal de Alcolabs...');
+    
+    const alcolabsBtn = document.getElementById('alcolabsBtn');
+    const alcolabsModal = document.getElementById('alcolabs-modal');
+    const closeAlcolabsModal = document.querySelector('.close-alcolabs-modal');
+    
+    if (!alcolabsBtn || !alcolabsModal || !closeAlcolabsModal) {
+        console.error('❌ Elementos del modal de Alcolabs no encontrados');
+        return;
+    }
+    
+    // Event listener para abrir el modal
+    alcolabsBtn.addEventListener('click', () => {
+        console.log('🎭 Abriendo modal de Alcolabs...');
+        showAlcolabsModal();
+    });
+    
+    // Event listener para cerrar el modal
+    closeAlcolabsModal.addEventListener('click', () => {
+        console.log('❌ Cerrando modal de Alcolabs con X...');
+        playSound('click');
+        hideAlcolabsModal();
+    });
+    
+    // Cerrar modal haciendo clic fuera
+    alcolabsModal.addEventListener('click', (e) => {
+        if (e.target === alcolabsModal) {
+            console.log('❌ Cerrando modal de Alcolabs con clic fuera...');
+            hideAlcolabsModal();
+        }
+    });
+    
+    // Cerrar modal con ESC
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && alcolabsModal.style.display === 'block') {
+            console.log('❌ Cerrando modal de Alcolabs con ESC...');
+            hideAlcolabsModal();
+        }
+    });
+    
+    console.log('✅ Modal de Alcolabs inicializado correctamente');
+}
+
+function showAlcolabsModal() {
+    const alcolabsModal = document.getElementById('alcolabs-modal');
+    const countdownElement = document.getElementById('redirect-countdown');
+    
+    if (!alcolabsModal || !countdownElement) {
+        console.error('❌ Elementos del modal de Alcolabs no encontrados');
+        return;
+    }
+    
+    // Mostrar modal
+    alcolabsModal.style.display = 'block';
+    console.log('🎭 Modal de Alcolabs mostrado');
+    
+    // Reproducir sonido
+    playSound('click');
+    
+    // Iniciar countdown de redirección
+    let countdown = 5;
+    countdownElement.textContent = countdown;
+    
+    const countdownInterval = setInterval(() => {
+        countdown--;
+        countdownElement.textContent = countdown;
+        
+        if (countdown <= 0) {
+            clearInterval(countdownInterval);
+            console.log('🌐 Redirigiendo a Alcolabs...');
+            
+            // Mostrar el enlace y hacer clic automáticamente
+            const alcolabsLink = document.getElementById('alcolabs-link');
+            if (alcolabsLink) {
+                alcolabsLink.style.display = 'inline-block';
+                alcolabsLink.click();
+            }
+            
+            // Cerrar modal después de un breve delay
+            setTimeout(() => {
+                hideAlcolabsModal();
+            }, 2000);
+        }
+    }, 1000);
+    
+    // Guardar el interval para poder cancelarlo si se cierra el modal
+    alcolabsModal.countdownInterval = countdownInterval;
+}
+
+function hideAlcolabsModal() {
+    const alcolabsModal = document.getElementById('alcolabs-modal');
+    
+    if (!alcolabsModal) {
+        console.error('❌ Modal de Alcolabs no encontrado');
+        return;
+    }
+    
+    // Cancelar countdown si existe
+    if (alcolabsModal.countdownInterval) {
+        clearInterval(alcolabsModal.countdownInterval);
+        alcolabsModal.countdownInterval = null;
+    }
+    
+    // Ocultar modal
+    alcolabsModal.style.display = 'none';
+    console.log('✅ Modal de Alcolabs ocultado');
+}
+
+// ================================
+// NAVEGADOR DESKTOP
+// ================================
+
+function initDesktopNavigator() {
+    console.log('🖥️ Inicializando navegador desktop...');
+    
+    const homeBtn = document.getElementById('homeBtn');
+    const backBtn = document.getElementById('backBtn');
+    const forwardBtn = document.getElementById('forwardBtn');
+    
+    if (!homeBtn || !backBtn || !forwardBtn) {
+        console.error('❌ Botones del navegador desktop no encontrados');
+        return;
+    }
+    
+    // Event listeners para los botones
+    homeBtn.addEventListener('click', () => {
+        console.log('🏠 Navegando a home...');
+        playSound('click');
+        handleDesktopNavigation('home');
+    });
+    
+    backBtn.addEventListener('click', () => {
+        console.log('⬅️ Navegando atrás...');
+        playSound('click');
+        handleDesktopNavigation('back');
+    });
+    
+    forwardBtn.addEventListener('click', () => {
+        console.log('➡️ Navegando adelante...');
+        playSound('click');
+        handleDesktopNavigation('forward');
+    });
+    
+    console.log('✅ Navegador desktop inicializado correctamente');
+}
+
+function handleDesktopNavigation(action) {
+    const sections = [
+        { title: 'Welcome', selector: '.welcome-section' },
+        { title: 'What is ZatoBox?', selector: '.what-is-section' },
+        { title: 'Why do we do it?', selector: '.why-section' },
+        { title: 'What do we offer?', selector: '.features-section' },
+        { title: 'How to collaborate?', selector: '.collaborate-section' },
+        { title: 'Call to Action', selector: '.cta-section' }
+    ];
+    
+    if (!window.currentSectionIndex) {
+        window.currentSectionIndex = 0;
+    }
+    
+    switch(action) {
+        case 'home':
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.currentSectionIndex = 0;
+            console.log('✅ Navegado a home');
+            break;
+            
+        case 'back':
+            if (window.currentSectionIndex > 0) {
+                window.currentSectionIndex--;
+                const section = sections[window.currentSectionIndex];
+                
+                const sectionElement = document.querySelector(section.selector);
+                if (sectionElement) {
+                    sectionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    console.log(`✅ Navegado a: ${section.title}`);
+                }
+            } else {
+                console.log('⚠️ Ya estás en la primera sección');
+            }
+            break;
+            
+        case 'forward':
+            if (window.currentSectionIndex < sections.length - 1) {
+                window.currentSectionIndex++;
+                const section = sections[window.currentSectionIndex];
+                
+                const sectionElement = document.querySelector(section.selector);
+                if (sectionElement) {
+                    sectionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    console.log(`✅ Navegado a: ${section.title}`);
+                }
+            } else {
+                console.log('⚠️ Ya estás en la última sección');
+            }
+            break;
+    }
+}
+
+// ================================
+// FUNCIÓN PARA SCROLL A JOIN SECTION
+// ================================
+
+function scrollToJoinSection() {
+    console.log('🚨 Navegando a la sección JOIN THE PROJECT...');
+    
+    // Reproducir sonido de clic
+    playSound('click');
+    
+    // Buscar la sección CTA
+    const ctaSection = document.querySelector('.cta-section');
+    
+    if (ctaSection) {
+        // Hacer scroll suave a la sección
+        ctaSection.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+        });
+        
+        // Efecto visual en la sección de destino
+        setTimeout(() => {
+            ctaSection.style.boxShadow = '0 0 30px rgba(255, 0, 0, 0.8)';
+            ctaSection.style.transform = 'scale(1.02)';
+            
+            setTimeout(() => {
+                ctaSection.style.boxShadow = '';
+                ctaSection.style.transform = '';
+            }, 1000);
+        }, 500);
+        
+        console.log('✅ Navegado a JOIN THE PROJECT');
+    } else {
+        console.error('❌ Sección CTA no encontrada');
+    }
+}
+
+// ================================
+// FUNCIÓN PARA TOOLTIPS EN MÓVILES
+// ================================
+
+function initMobileTooltips() {
+    console.log('📱 Inicializando tooltips para móviles...');
+    
+    // Solo activar en dispositivos móviles
+    if (window.innerWidth <= 768) {
+        const tooltipCards = document.querySelectorAll('.feature-card-with-tooltip');
+        let scrollTimeout;
+        let shownCards = new Set();
+        
+        // Función para verificar si un elemento está en el viewport
+        function isInViewport(element) {
+            const rect = element.getBoundingClientRect();
+            const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+            
+            // Mostrar cuando la tarjeta está en el centro del viewport
+            return (
+                rect.top <= windowHeight * 0.7 &&
+                rect.bottom >= windowHeight * 0.3
+            );
+        }
+        
+        // Función para manejar el scroll con debounce
+        function handleScroll() {
+            clearTimeout(scrollTimeout);
+            
+            scrollTimeout = setTimeout(() => {
+                tooltipCards.forEach(card => {
+                    if (isInViewport(card) && !shownCards.has(card)) {
+                        // Marcar como mostrada
+                        shownCards.add(card);
+                        
+                        // Mostrar tooltip con delay
+                        setTimeout(() => {
+                            card.classList.add('show-tooltip');
+                        }, 300);
+                        
+                        // Ocultar tooltip después de 4 segundos
+                        setTimeout(() => {
+                            card.classList.remove('show-tooltip');
+                        }, 4000);
+                    }
+                });
+            }, 100);
+        }
+        
+        // Escuchar eventos de scroll
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        
+        // Ejecutar una vez al cargar
+        setTimeout(handleScroll, 1000);
+        
+        console.log('✅ Tooltips móviles inicializados');
+    }
+}
+
+// Inicializar tooltips móviles cuando se carga la página
+document.addEventListener('DOMContentLoaded', function() {
+    initMobileTooltips();
+    
+    // Reinicializar cuando cambie el tamaño de la ventana
+    window.addEventListener('resize', function() {
+        // Remover tooltips activos
+        document.querySelectorAll('.show-tooltip').forEach(card => {
+            card.classList.remove('show-tooltip');
+        });
+        
+        // Reinicializar
+        initMobileTooltips();
+    });
+}); 
