@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>🌟 ZatoBox - The Free Software Rebellion 🌟</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles-optimized.css">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -81,7 +81,7 @@
             </div>
             <div class="subtitle">🚀 Decentralized Point of Sale for a New Economy 🚀</div>
             <div class="hero-image-container">
-                <img src="images/the-mask-jim-carrey.gif" alt="The Mask Cash Register" class="hero-image">
+                <img src="images/the-mask-jim-carrey.gif" alt="The Mask Cash Register" class="hero-image" loading="lazy">
             </div>
             <div class="status-banner">
                 🚧 UNDER CONSTRUCTION 🚧 | Last update: <span id="last-update">Loading...</span>
@@ -155,7 +155,7 @@
             </div>
 
             <div class="hero-image-container">
-                <img src="images/matrix-neo.gif" alt="Neo from Matrix" class="hero-image">
+                <img src="images/matrix-neo.gif" alt="Neo from Matrix" class="hero-image" loading="lazy">
             </div>
 
             <div class="content-text">
@@ -187,7 +187,7 @@
                         <div class="card-content">
                             <p>Accept payments in Bitcoin, Lightning network and more</p>
                             <div class="feature-gif-container">
-                                <img src="images/bitcoin-zero.gif" alt="Bitcoin Zero" class="feature-gif">
+                                <img src="images/bitcoin-zero.gif" alt="Bitcoin Zero" class="feature-gif" loading="lazy">
                             </div>
                         </div>
                     </div>
@@ -196,7 +196,7 @@
                         <div class="card-content">
                             <p>Stock control with AI and OCR</p>
                             <div class="feature-gif-container">
-                                <img src="images/fadding-smart.gif" alt="Smart Inventory" class="feature-gif">
+                                <img src="images/fadding-smart.gif" alt="Smart Inventory" class="feature-gif" loading="lazy">
                             </div>
                         </div>
                     </div>
@@ -205,7 +205,7 @@
                         <div class="card-content">
                             <p>Developers from all over the world collaborating</p>
                             <div class="feature-gif-container">
-                                <img src="images/comunity.gif" alt="Global Community" class="feature-gif">
+                                <img src="images/comunity.gif" alt="Global Community" class="feature-gif" loading="lazy">
                             </div>
                         </div>
                     </div>
@@ -357,7 +357,7 @@ npm start
                     <p class="alcolabs-text">"Crypto is just the beginning.<br>Behind the chaos lies structure.<br>ZatoBox reveals its other face: <strong>Alcolabs</strong>."</p>
                 </div>
                 <div class="alcolabs-gif-container">
-                    <img src="images/kevin-spacey-mask.gif" alt="Kevin Spacey Mask Reveal" class="alcolabs-gif">
+                    <img src="images/kevin-spacey-mask.gif" alt="Kevin Spacey Mask Reveal" class="alcolabs-gif" loading="lazy">
                 </div>
                 <div class="alcolabs-redirect">
                     <p>Redirecting to Alcolabs in <span id="redirect-countdown">5</span> seconds...</p>
@@ -373,7 +373,8 @@ npm start
 
     <!-- Sonido de click optimizado -->
     <audio id="click-sound" src="sounds/click.mp3" preload="auto" volume="0.3"></audio>
-        <audio id="background-music" src="sounds/Lost in the Matrix.mp3" preload="auto" volume="0.6" loop></audio>
+    <!-- Música de fondo - cargar solo cuando se necesite -->
+    <audio id="background-music" preload="none" volume="0.6" loop></audio>
 
     <script src="script.js"></script>
 </body>
