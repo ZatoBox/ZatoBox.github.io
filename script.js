@@ -535,116 +535,106 @@ function initSoundEffects() {
 // Inicializar funcionalidad del modal GIF
 // Función para controlar la música de fondo
 function toggleMusic() {
-    if (!backgroundMusic) return;
+    const backgroundMusic = document.getElementById('background-music');
+    const musicBtn = document.getElementById('musicBtn');
+    const mobileMusicBtn = document.getElementById('mobileMusicBtn');
     
-    if (musicPlaying) {
-        backgroundMusic.pause();
-        // Actualizar ambos botones (desktop y móvil)
-        if (musicBtn) {
-            musicBtn.innerHTML = '🔇';
-            musicBtn.title = 'Play music';
-        }
-        const mobileMusicBtn = document.getElementById('mobileMusicBtn');
-        if (mobileMusicBtn) {
-            mobileMusicBtn.innerHTML = '🔇';
-            mobileMusicBtn.title = 'Play music';
-        }
-        musicPlaying = false;
-        console.log('🎵 Music paused (current volume:', backgroundMusic.volume.toFixed(2) + ')');
+    if (!backgroundMusic) {
+        console.error('❌ Elemento de música de fondo no encontrado');
+        return;
+    }
+    
+    // Si la música no tiene src, cargarla primero
+    if (!backgroundMusic.src || backgroundMusic.src === window.location.href) {
+        backgroundMusic.src = 'sounds/Lost in the Matrix.mp3';
+        console.log('🎵 Música cargada bajo demanda');
+    }
+    
+    if (backgroundMusic.paused) {
+        backgroundMusic.play().then(() => {
+            console.log('🎵 Música iniciada');
+            if (musicBtn) musicBtn.textContent = '⏸️';
+            if (mobileMusicBtn) mobileMusicBtn.textContent = '⏸️';
+        }).catch(error => {
+            console.error('❌ Error al reproducir música:', error);
+        });
     } else {
-        const playPromise = backgroundMusic.play();
-        if (playPromise !== undefined) {
-            playPromise.then(() => {
-                // Actualizar ambos botones (desktop y móvil)
-                if (musicBtn) {
-                    musicBtn.innerHTML = '🎵';
-                    musicBtn.title = 'Pause music';
-                }
-                const mobileMusicBtn = document.getElementById('mobileMusicBtn');
-                if (mobileMusicBtn) {
-                    mobileMusicBtn.innerHTML = '🎵';
-                    mobileMusicBtn.title = 'Pause music';
-                }
-                musicPlaying = true;
-                console.log('🎵 Music resumed (current volume:', backgroundMusic.volume.toFixed(2) + ')');
-            }).catch(error => {
-                console.log("Error playing music:", error);
-            });
-        }
+        backgroundMusic.pause();
+        console.log('🎵 Música pausada');
+        if (musicBtn) musicBtn.textContent = '🎵';
+        if (mobileMusicBtn) mobileMusicBtn.textContent = '🎵';
     }
 }
 
 // Función para inicializar la música de fondo desde la pantalla VHS
 function initBackgroundMusic() {
-    // Inicializar efectos de sonido si no se ha hecho
+    console.log('🎵 Inicializando música de fondo...');
+    
+    const backgroundMusic = document.getElementById('background-music');
+    const musicBtn = document.getElementById('musicBtn');
+    const mobileMusicBtn = document.getElementById('mobileMusicBtn');
+    
     if (!backgroundMusic) {
-        initSoundEffects();
+        console.error('❌ Elemento de música de fondo no encontrado');
+        return;
     }
     
-    if (backgroundMusic) {
-        console.log('🎵 Iniciando Lost in the Matrix desde pantalla VHS...');
-        backgroundMusic.volume = 0.6; // 60% del volumen inicial
-        
-        const playPromise = backgroundMusic.play();
-        if (playPromise !== undefined) {
-            playPromise.then(() => {
-                musicPlaying = true;
-                if (musicBtn) {
-                    musicBtn.innerHTML = '🎵';
-                    musicBtn.title = 'Pause music';
-                }
-                const mobileMusicBtn = document.getElementById('mobileMusicBtn');
-                if (mobileMusicBtn) {
-                    mobileMusicBtn.innerHTML = '🎵';
-                    mobileMusicBtn.title = 'Pause music';
-                }
-                console.log("🎵 Lost in the Matrix playing at 60% volume");
-                
-                // Iniciar degradado de volumen después de 2 segundos
-                setTimeout(() => {
-                    startVolumeFade();
-                }, 2000);
-                
-            }).catch(error => {
-                console.log("⚠️ Autoplay blocked, music will start with first interaction");
-                if (musicBtn) {
-                    musicBtn.innerHTML = '🔇';
-                    musicBtn.title = 'Play music';
-                }
-                const mobileMusicBtn = document.getElementById('mobileMusicBtn');
-                if (mobileMusicBtn) {
-                    mobileMusicBtn.innerHTML = '🔇';
-                    mobileMusicBtn.title = 'Play music';
-                }
-                musicPlaying = false;
-                
-                // Fallback: iniciar música con primera interacción del usuario
-                document.addEventListener('click', function startMusicOnFirstClick() {
-                    if (!musicPlaying) {
-                        backgroundMusic.play().then(() => {
-                            musicPlaying = true;
-                            if (musicBtn) {
-                                musicBtn.innerHTML = '🎵';
-                                musicBtn.title = 'Pause music';
-                            }
-                            const mobileMusicBtn = document.getElementById('mobileMusicBtn');
-                            if (mobileMusicBtn) {
-                                mobileMusicBtn.innerHTML = '🎵';
-                                mobileMusicBtn.title = 'Pause music';
-                            }
-                            console.log("🎵 Lost in the Matrix started by user interaction");
-                            
-                            // Iniciar degradado de volumen después de 2 segundos
-                            setTimeout(() => {
-                                startVolumeFade();
-                            }, 2000);
-                        });
-                        document.removeEventListener('click', startMusicOnFirstClick);
-                    }
-                }, { once: true });
-            });
+    // Configurar música
+    backgroundMusic.volume = 0.6;
+    backgroundMusic.loop = true;
+    
+    // Variable para controlar si la música ya se cargó
+    let musicLoaded = false;
+    
+    // Función para cargar música bajo demanda
+    function loadMusic() {
+        if (!musicLoaded) {
+            backgroundMusic.src = 'sounds/Lost in the Matrix.mp3';
+            musicLoaded = true;
+            console.log('🎵 Música cargada bajo demanda');
         }
     }
+    
+    // Función para alternar música
+    function toggleMusic() {
+        if (!musicLoaded) {
+            loadMusic();
+        }
+        
+        if (backgroundMusic.paused) {
+            backgroundMusic.play().then(() => {
+                console.log('🎵 Música iniciada');
+                if (musicBtn) musicBtn.textContent = '⏸️';
+                if (mobileMusicBtn) mobileMusicBtn.textContent = '⏸️';
+            }).catch(error => {
+                console.error('❌ Error al reproducir música:', error);
+            });
+        } else {
+            backgroundMusic.pause();
+            console.log('🎵 Música pausada');
+            if (musicBtn) musicBtn.textContent = '🎵';
+            if (mobileMusicBtn) mobileMusicBtn.textContent = '🎵';
+        }
+    }
+    
+    // Event listeners para botones de música
+    if (musicBtn) {
+        musicBtn.addEventListener('click', () => {
+            console.log('🎵 Clic en botón de música (desktop)');
+            playSound('click');
+            toggleMusic();
+        });
+    }
+    
+    if (mobileMusicBtn) {
+        mobileMusicBtn.addEventListener('click', () => {
+            console.log('🎵 Clic en botón de música (móvil)');
+            playSound('click');
+            toggleMusic();
+        });
+    }
+    
+    console.log('✅ Música de fondo inicializada (carga bajo demanda)');
 }
 
 // Función para crear degradado suave del volumen
