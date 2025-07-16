@@ -1045,37 +1045,52 @@ function createInterferenceFlash() {
     const vhsScreen = document.getElementById('vhs-loading-screen');
     if (!vhsScreen) return;
     
-    // Crear flash de interferencia que brevemente muestra contenido
-    const flash = document.createElement('div');
-    flash.style.cssText = `
+    // Crear efecto suave que muestra la web de manera opaca
+    const preview = document.createElement('div');
+    preview.style.cssText = `
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(255,255,255,0.8);
-        z-index: 10002;
-        animation: interference-flash 0.3s ease-out;
+        background: rgba(0,0,0,0.7);
+        z-index: 9999;
+        animation: gentle-interference 1s ease-out;
+        backdrop-filter: blur(2px);
+        border: 1px solid rgba(0,255,0,0.3);
     `;
     
-    vhsScreen.appendChild(flash);
+    vhsScreen.appendChild(preview);
     
     setTimeout(() => {
-        flash.remove();
-    }, 300);
+        preview.remove();
+    }, 1000);
     
     // Agregar CSS para la animación si no existe
     if (!document.querySelector('#interference-flash-css')) {
         const style = document.createElement('style');
         style.id = 'interference-flash-css';
         style.textContent = `
-            @keyframes interference-flash {
-                0% { opacity: 0; }
-                20% { opacity: 0.8; }
-                40% { opacity: 0.2; }
-                60% { opacity: 0.9; }
-                80% { opacity: 0.1; }
-                100% { opacity: 0; }
+            @keyframes gentle-interference {
+                0% { 
+                    opacity: 0; 
+                    transform: translateY(-10px);
+                    background: rgba(0,0,0,1);
+                }
+                30% { 
+                    opacity: 0.8; 
+                    transform: translateY(0);
+                    background: rgba(0,0,0,0.6);
+                }
+                70% { 
+                    opacity: 0.6; 
+                    background: rgba(0,0,0,0.7);
+                }
+                100% { 
+                    opacity: 0; 
+                    transform: translateY(10px);
+                    background: rgba(0,0,0,1);
+                }
             }
             
             @keyframes vhs-shutdown {
@@ -1086,13 +1101,13 @@ function createInterferenceFlash() {
                 }
                 30% { 
                     opacity: 0.8; 
-                    transform: scale(1.01); 
-                    filter: brightness(1.5); 
+                    transform: scale(1.005); 
+                    filter: brightness(1.1); 
                 }
                 70% { 
                     opacity: 0.3; 
-                    transform: scale(0.99); 
-                    filter: brightness(0.5); 
+                    transform: scale(0.995); 
+                    filter: brightness(0.7); 
                 }
                 100% { 
                     opacity: 0; 

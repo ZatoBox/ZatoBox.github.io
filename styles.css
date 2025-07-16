@@ -41,11 +41,11 @@ body {
     width: 100%;
     height: 100%;
     background: 
-        radial-gradient(circle at 20% 80%, rgba(255,255,255,0.3) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.3) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(255,255,255,0.2) 0%, transparent 30%);
-    animation: vhs-static 0.1s infinite;
-    opacity: 0.1;
+        radial-gradient(circle at 20% 80%, rgba(255,255,255,0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.15) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(255,255,255,0.1) 0%, transparent 30%);
+    animation: vhs-static 0.2s infinite;
+    opacity: 0.08;
 }
 
 .vhs-interference {
@@ -57,7 +57,7 @@ body {
     background: linear-gradient(
         90deg,
         transparent 0%,
-        rgba(255,255,255,0.1) 50%,
+        rgba(255,255,255,0.05) 50%,
         transparent 100%
     );
     animation: vhs-interference 2s infinite;
@@ -73,11 +73,11 @@ body {
     background: repeating-linear-gradient(
         0deg,
         transparent,
-        transparent 2px,
-        rgba(0,255,0,0.05) 2px,
-        rgba(0,255,0,0.05) 4px
+        transparent 3px,
+        rgba(0,255,0,0.02) 3px,
+        rgba(0,255,0,0.02) 6px
     );
-    animation: vhs-scanlines 0.1s linear infinite;
+    animation: vhs-scanlines 0.15s linear infinite;
 }
 
 .vhs-noise {
@@ -86,9 +86,9 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><filter id="noise"><feTurbulence baseFrequency="0.9" numOctaves="3" seed="1"/></filter></defs><rect width="100" height="100" filter="url(%23noise)" opacity="0.1"/></svg>');
-    animation: vhs-noise 0.2s infinite;
-    opacity: 0.3;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><filter id="noise"><feTurbulence baseFrequency="0.7" numOctaves="2" seed="1"/></filter></defs><rect width="100" height="100" filter="url(%23noise)" opacity="0.05"/></svg>');
+    animation: vhs-noise 0.3s infinite;
+    opacity: 0.15;
 }
 
 .vhs-loading-text {
@@ -184,9 +184,9 @@ body {
 @keyframes vhs-interference {
     0% { opacity: 0; transform: translateX(-100%); }
     8% { opacity: 0; }
-    10% { opacity: 0.8; transform: translateX(-50%); }
-    12% { opacity: 1; transform: translateX(0%); }
-    14% { opacity: 0.8; transform: translateX(50%); }
+    10% { opacity: 0.2; transform: translateX(-50%); }
+    12% { opacity: 0.3; transform: translateX(0%); }
+    14% { opacity: 0.2; transform: translateX(50%); }
     16% { opacity: 0; transform: translateX(100%); }
     18% { opacity: 0; }
     100% { opacity: 0; transform: translateX(100%); }
