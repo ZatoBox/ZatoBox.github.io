@@ -2023,6 +2023,59 @@ body {
         padding: 10px 6px;
         font-size: 12px;
     }
+    
+    /* Centrar contenido en tablet */
+    .page-wrapper {
+        max-width: 100%;
+        margin: 0;
+        padding: 0 20px;
+    }
+    
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+        padding: 20px;
+        max-width: none;
+    }
+    
+    .content-block {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 800px;
+        text-align: center;
+    }
+    
+    /* Centrar elementos específicos en tablet */
+    .cta-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+        padding: 30px 20px;
+    }
+    
+    .cta-btn {
+        min-width: 200px;
+        text-align: center;
+    }
+    
+    .feature-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        justify-items: center;
+    }
+    
+    .contribution-ways {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        padding: 30px 20px;
+    }
+    
+    .footer-content {
+        text-align: center;
+        padding: 30px 20px;
+    }
 }
 
 @media (max-width: 768px) {
@@ -2059,6 +2112,108 @@ body {
     .mobile-menu-toggle {
         padding: 6px 10px;
         font-size: 14px;
+    }
+    
+    /* Centrar contenido en móvil */
+    .page-wrapper {
+        max-width: 100%;
+        margin: 0;
+        padding: 0 10px;
+    }
+    
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+        padding: 15px 10px;
+        max-width: none;
+    }
+    
+    .content-block {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 100%;
+        padding: 20px 15px;
+    }
+    
+    .site-header {
+        padding: 20px 15px;
+        margin-bottom: 30px;
+    }
+    
+    .main-title {
+        max-width: 300px;
+    }
+    
+    .section-header h2 {
+        font-size: 1.2em;
+        text-align: center;
+    }
+    
+    .feature-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .feature-card {
+        padding: 20px 15px;
+    }
+    
+    /* Centrar botones CTA en móvil */
+    .cta-buttons {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        padding: 20px 10px;
+    }
+    
+    .cta-btn {
+        width: 100%;
+        max-width: 280px;
+        text-align: center;
+        padding: 15px 20px;
+        font-size: 14px;
+    }
+    
+    /* Centrar código de instalación */
+    .installation-guide {
+        text-align: center;
+        padding: 20px 10px;
+    }
+    
+    .code-block {
+        margin: 15px auto;
+        max-width: 100%;
+        overflow-x: auto;
+    }
+    
+    /* Centrar elementos de contribución */
+    .contribution-ways {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        padding: 20px 10px;
+    }
+    
+    .contribution-item {
+        width: 100%;
+        max-width: 300px;
+        text-align: center;
+        padding: 15px;
+    }
+    
+    /* Footer centrado */
+    .footer-content {
+        text-align: center;
+        padding: 20px 10px;
+    }
+    
+    .footer-links {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
     }
     
     .modal-content {
