@@ -55,12 +55,27 @@ function initEasterEggs() {
     const fireworks = document.getElementById('fireworks');
     const vhsTape = document.getElementById('vhs-tape');
     
+    // Verificar si los elementos existen antes de usarlos
+    if (!dancingCat) {
+        console.log('⚠️ Elemento dancing-cat no encontrado');
+    }
+    if (!fireworks) {
+        console.log('⚠️ Elemento fireworks no encontrado');
+    }
+    if (!vhsTape) {
+        console.log('⚠️ Elemento vhs-tape no encontrado');
+    }
+    
     // Gato bailando - aparece al hacer clic en el título
     const siteLogo = document.querySelector('.site-logo');
-    siteLogo.addEventListener('click', () => {
-        showEasterEgg(dancingCat, 3000);
-        playSound('click');
-    });
+    if (siteLogo) {
+        siteLogo.addEventListener('click', () => {
+            if (dancingCat) {
+                showEasterEgg(dancingCat, 3000);
+            }
+            playSound('click');
+        });
+    }
     
     // Funcionalidad de los botones del panel de control (desktop y mobile)
     const controlButtons = document.querySelectorAll('.control-btn');
@@ -84,32 +99,38 @@ function initEasterEggs() {
     let currentSectionIndex = 0;
     
     // Configurar panel de control desktop con nueva funcionalidad
-    controlButtons.forEach((button, index) => {
-        button.addEventListener('click', () => {
-            playSound('click');
-            
-            // Efecto visual del botón
-            button.style.transform = 'scale(0.9)';
-            setTimeout(() => {
-                button.style.transform = 'scale(1)';
-            }, 100);
-            
-            // Mapear botones a acciones
-            const actions = ['home', 'back', 'forward', 'reload'];
-            const action = actions[index];
-            
-            if (action && statusText) {
-                handleNavigationAction(action, statusText);
+    if (controlButtons && controlButtons.length > 0) {
+        controlButtons.forEach((button, index) => {
+            if (button) {
+                button.addEventListener('click', () => {
+                    playSound('click');
+                    
+                    // Efecto visual del botón
+                    button.style.transform = 'scale(0.9)';
+                    setTimeout(() => {
+                        button.style.transform = 'scale(1)';
+                    }, 100);
+                    
+                    // Mapear botones a acciones
+                    const actions = ['home', 'back', 'forward', 'reload'];
+                    const action = actions[index];
+                    
+                    if (action && statusText) {
+                        handleNavigationAction(action, statusText);
+                    }
+                });
             }
         });
-    });
+    }
     
 
     
     // Fuegos artificiales - aparece al presionar F
     document.addEventListener('keydown', (e) => {
         if (e.key === 'f' || e.key === 'F') {
-            showEasterEgg(fireworks, 2000);
+            if (fireworks) {
+                showEasterEgg(fireworks, 2000);
+            }
             playSound('click');
         }
     });
@@ -117,7 +138,9 @@ function initEasterEggs() {
     // Cinta VHS - aparece al hacer scroll hasta el final
     window.addEventListener('scroll', () => {
         if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
-            showEasterEgg(vhsTape, 5000);
+            if (vhsTape) {
+                showEasterEgg(vhsTape, 5000);
+            }
         }
     });
     
