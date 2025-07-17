@@ -179,7 +179,6 @@ function initMobileControlPanel() {
     const mobileBackBtn = document.getElementById('mobileBackBtn');
     const mobileForwardBtn = document.getElementById('mobileForwardBtn');
     const mobileAlcolabsBtn = document.getElementById('mobileAlcolabsBtn');
-    const mobileMusicBtn = document.getElementById('mobileMusicBtn');
     
     // Toggle del menú móvil - Prevenir múltiples event listeners
     if (mobileToggle && mobileContent) {
@@ -277,19 +276,7 @@ function initMobileControlPanel() {
         });
     }
     
-    if (mobileMusicBtn) {
-        mobileMusicBtn.addEventListener('click', () => {
-            console.log('🎵 Toggle música (móvil)...');
-            playSound('click');
-            toggleMusic();
-            
-            // Efecto visual
-            mobileMusicBtn.style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                mobileMusicBtn.style.transform = 'scale(1)';
-            }, 150);
-        });
-    }
+
     
     console.log('✅ Panel de control móvil inicializado');
 }
@@ -465,41 +452,15 @@ function triggerKonamiEasterEgg() {
 
 // Efectos de sonido optimizados
 // Variables globales para la música
-let backgroundMusic, musicBtn, musicPlaying = false;
+
 
 function initSoundEffects() {
     const clickSound = document.getElementById('click-sound');
-    backgroundMusic = document.getElementById('background-music');
-    musicBtn = document.getElementById('musicBtn');
     
     // Precargar el audio para reducir latencia
     if (clickSound) {
         clickSound.preload = 'auto';
         clickSound.volume = 0.3;
-    }
-    
-    // Configurar música de fondo
-    if (backgroundMusic) {
-        backgroundMusic.preload = 'auto';
-        backgroundMusic.volume = 0.6; // 60% del volumen
-        backgroundMusic.loop = true;
-    }
-    
-    // Configurar botón de música desktop
-    if (musicBtn) {
-        musicBtn.addEventListener('click', toggleMusic);
-        // Inicializar icono del botón
-        musicBtn.innerHTML = '🔇';
-        musicBtn.title = 'Play/Pause music';
-    }
-    
-    // Configurar botón de música móvil
-    const mobileMusicBtn = document.getElementById('mobileMusicBtn');
-    if (mobileMusicBtn) {
-        mobileMusicBtn.addEventListener('click', toggleMusic);
-        // Inicializar icono del botón móvil
-        mobileMusicBtn.innerHTML = '🔇';
-        mobileMusicBtn.title = 'Play/Pause music';
     }
     
     // Seleccionar TODOS los elementos clickeables (desktop y mobile)
@@ -533,239 +494,254 @@ function initSoundEffects() {
 }
 
 // Inicializar funcionalidad del modal GIF
-// Función para controlar la música de fondo
-function toggleMusic() {
-    console.log('🎵 Función toggleMusic llamada');
-    
-    const backgroundMusic = document.getElementById('background-music');
-    const musicBtn = document.getElementById('musicBtn');
-    const mobileMusicBtn = document.getElementById('mobileMusicBtn');
-    
-    console.log('🎵 Elementos encontrados:', {
-        backgroundMusic: !!backgroundMusic,
-        musicBtn: !!musicBtn,
-        mobileMusicBtn: !!mobileMusicBtn
-    });
-    
-    if (!backgroundMusic) {
-        console.error('❌ Elemento de música de fondo no encontrado');
-        return;
+// Reproductor de música
+class MusicPlayer {
+    constructor() {
+        this.audio = document.getElementById('background-music');
+        this.isPlaying = false;
+        this.currentTime = 0;
+        this.duration = 0;
+        
+        // Elementos del reproductor desktop minimalista
+        this.playPauseBtn = document.getElementById('playPauseBtn');
+        this.progressFill = document.getElementById('progressFill');
+        this.timeDisplay = document.getElementById('timeDisplay');
+        this.volumeSlider = document.getElementById('volumeSlider');
+        
+        // Elementos del reproductor móvil compacto
+        this.mobileMusicToggle = document.getElementById('mobileMusicToggle');
+        this.mobileMusicPlayer = document.getElementById('mobileMusicPlayer');
+        this.mobileProgressFill = document.getElementById('mobileProgressFill');
+        this.mobileVolumeSlider = document.getElementById('mobileVolumeSlider');
+        
+        // Variables para el scroll en móvil
+        this.lastScrollY = 0;
+        this.scrollThreshold = 50;
+        this.isHidden = false;
+        
+        this.init();
     }
     
-    // Si la música no tiene src, cargarla primero
-    if (!backgroundMusic.src || backgroundMusic.src === window.location.href) {
-        backgroundMusic.src = 'sounds/Lost in the Matrix.mp3';
-        backgroundMusic.volume = 0.6;
-        backgroundMusic.loop = true;
-        console.log('🎵 Música cargada bajo demanda');
+    init() {
+        if (!this.audio) {
+            console.error('❌ Elemento de audio no encontrado');
+            return;
+        }
+        
+        // Configurar audio
+        this.audio.src = 'sounds/Lost in the Matrix.mp3';
+        this.audio.volume = 0.6;
+        this.audio.loop = true;
+        
+        // Event listeners del audio
+        this.audio.addEventListener('loadedmetadata', () => {
+            this.duration = this.audio.duration;
+            this.updateTimeDisplay();
+        });
+        
+        this.audio.addEventListener('timeupdate', () => {
+            this.currentTime = this.audio.currentTime;
+            this.updateProgress();
+            this.updateTimeDisplay();
+        });
+        
+        this.audio.addEventListener('ended', () => {
+            this.isPlaying = false;
+            this.updatePlayPauseButton();
+        });
+        
+        // Event listeners del reproductor desktop
+        if (this.playPauseBtn) {
+            this.playPauseBtn.addEventListener('click', () => {
+                this.togglePlayPause();
+            });
+        }
+        
+        if (this.volumeSlider) {
+            this.volumeSlider.addEventListener('input', (e) => {
+                this.setVolume(e.target.value / 100);
+            });
+        }
+        
+        // Event listeners del reproductor móvil
+        if (this.mobileMusicToggle) {
+            this.mobileMusicToggle.addEventListener('click', () => {
+                this.togglePlayPause();
+            });
+        }
+        
+        if (this.mobileVolumeSlider) {
+            this.mobileVolumeSlider.addEventListener('input', (e) => {
+                this.setVolume(e.target.value / 100);
+            });
+        }
+        
+        // Event listener para el scroll en móvil
+        if (window.innerWidth <= 768) {
+            this.initMobileScrollHandler();
+        }
+        
+        // Inicializar volumen
+        this.setVolume(0.6);
+        
+        console.log('✅ Reproductor de música inicializado');
     }
     
-    console.log('🎵 Estado actual de la música:', {
-        paused: backgroundMusic.paused,
-        src: backgroundMusic.src,
-        volume: backgroundMusic.volume,
-        currentTime: backgroundMusic.currentTime
-    });
+    togglePlayPause() {
+        if (this.isPlaying) {
+            this.pause();
+        } else {
+            this.play();
+        }
+    }
     
-    // Verificar si la música está realmente reproduciéndose
-    const isPlaying = !backgroundMusic.paused && !backgroundMusic.ended && backgroundMusic.currentTime > 0;
-    
-    console.log('🎵 ¿Está reproduciéndose?', isPlaying);
-    
-    if (!isPlaying) {
-        console.log('🎵 Intentando reproducir música...');
-        backgroundMusic.play().then(() => {
-            console.log('🎵 Música iniciada exitosamente');
-            if (musicBtn) {
-                musicBtn.textContent = '⏸️';
-                console.log('🎵 Botón desktop actualizado a ⏸️');
-            }
-            if (mobileMusicBtn) {
-                mobileMusicBtn.textContent = '⏸️';
-                console.log('🎵 Botón móvil actualizado a ⏸️');
-            }
+    play() {
+        this.audio.play().then(() => {
+            this.isPlaying = true;
+            this.updatePlayPauseButton();
+            console.log('🎵 Música iniciada');
         }).catch(error => {
             console.error('❌ Error al reproducir música:', error);
         });
-    } else {
-        console.log('🎵 Pausando música...');
-        backgroundMusic.pause();
-        console.log('🎵 Música pausada exitosamente');
-        if (musicBtn) {
-            musicBtn.textContent = '🎵';
-            console.log('🎵 Botón desktop actualizado a 🎵');
+    }
+    
+    pause() {
+        this.audio.pause();
+        this.isPlaying = false;
+        this.updatePlayPauseButton();
+        console.log('🎵 Música pausada');
+    }
+    
+    setVolume(volume) {
+        this.audio.volume = volume;
+        
+        // Actualizar sliders
+        if (this.volumeSlider) {
+            this.volumeSlider.value = volume * 100;
         }
-        if (mobileMusicBtn) {
-            mobileMusicBtn.textContent = '🎵';
-            console.log('🎵 Botón móvil actualizado a 🎵');
+        if (this.mobileVolumeSlider) {
+            this.mobileVolumeSlider.value = volume * 100;
+        }
+        
+        console.log('🔊 Volumen establecido:', volume);
+    }
+    
+    updatePlayPauseButton() {
+        const icon = this.isPlaying ? '⏸️' : '▶️';
+        
+        if (this.playPauseBtn) {
+            this.playPauseBtn.textContent = icon;
+        }
+        if (this.mobileMusicToggle) {
+            this.mobileMusicToggle.textContent = icon;
+        }
+    }
+    
+    updateProgress() {
+        if (this.duration > 0) {
+            const progress = (this.currentTime / this.duration) * 100;
+            
+            if (this.progressFill) {
+                this.progressFill.style.width = `${progress}%`;
+            }
+            if (this.mobileProgressFill) {
+                this.mobileProgressFill.style.width = `${progress}%`;
+            }
+        }
+    }
+    
+    updateTimeDisplay() {
+        const currentTimeStr = this.formatTime(this.currentTime);
+        const durationStr = this.formatTime(this.duration);
+        
+        if (this.timeDisplay) {
+            this.timeDisplay.textContent = currentTimeStr;
+        }
+    }
+    
+    formatTime(seconds) {
+        if (isNaN(seconds)) return '0:00';
+        
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = Math.floor(seconds % 60);
+        return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+    }
+    
+    initMobileScrollHandler() {
+        let scrollTimeout;
+        
+        window.addEventListener('scroll', () => {
+            if (window.innerWidth > 768) return; // Solo en móvil
+            
+            const currentScrollY = window.scrollY;
+            const scrollDelta = currentScrollY - this.lastScrollY;
+            
+            // Limpiar timeout anterior
+            clearTimeout(scrollTimeout);
+            
+            // Ocultar al hacer scroll hacia abajo
+            if (scrollDelta > this.scrollThreshold && !this.isHidden) {
+                this.hideMobilePlayer();
+            }
+            // Mostrar al hacer scroll hacia arriba
+            else if (scrollDelta < -this.scrollThreshold && this.isHidden) {
+                this.showMobilePlayer();
+            }
+            
+            this.lastScrollY = currentScrollY;
+            
+            // Mostrar automáticamente después de 3 segundos sin scroll
+            scrollTimeout = setTimeout(() => {
+                if (this.isHidden) {
+                    this.showMobilePlayer();
+                }
+            }, 3000);
+        });
+    }
+    
+    hideMobilePlayer() {
+        if (this.mobileMusicPlayer && !this.isHidden) {
+            this.mobileMusicPlayer.classList.add('hidden');
+            this.isHidden = true;
+        }
+    }
+    
+    showMobilePlayer() {
+        if (this.mobileMusicPlayer && this.isHidden) {
+            this.mobileMusicPlayer.classList.remove('hidden');
+            this.isHidden = false;
         }
     }
 }
 
-// Función para inicializar la música de fondo desde la pantalla VHS
-function initBackgroundMusic() {
-    console.log('🎵 Inicializando música de fondo...');
+// Variable global para el reproductor
+let musicPlayer;
+
+// Función para inicializar el reproductor de música
+function initMusicPlayer() {
+    console.log('🎵 Inicializando reproductor de música...');
     
-    const backgroundMusic = document.getElementById('background-music');
-    const musicBtn = document.getElementById('musicBtn');
-    const mobileMusicBtn = document.getElementById('mobileMusicBtn');
-    
-    console.log('🎵 Elementos de música encontrados:', {
-        backgroundMusic: !!backgroundMusic,
-        musicBtn: !!musicBtn,
-        mobileMusicBtn: !!mobileMusicBtn
-    });
-    
-    if (!backgroundMusic) {
-        console.error('❌ Elemento de música de fondo no encontrado');
-        return;
-    }
-    
-    // Configurar música básica
-    backgroundMusic.volume = 0.6;
-    backgroundMusic.loop = true;
-    
-    // Event listeners para botones de música
-    if (musicBtn) {
-        console.log('🎵 Configurando event listener para botón desktop');
-        musicBtn.addEventListener('click', () => {
-            console.log('🎵 Clic en botón de música (desktop)');
-            playSound('click');
-            
-            // Lógica directa para el botón desktop
-            if (!backgroundMusic.src || backgroundMusic.src === window.location.href) {
-                backgroundMusic.src = 'sounds/Lost in the Matrix.mp3';
-                backgroundMusic.volume = 0.6;
-                backgroundMusic.loop = true;
-                console.log('🎵 Música cargada para desktop');
-            }
-            
-            if (backgroundMusic.paused) {
-                backgroundMusic.play().then(() => {
-                    musicBtn.textContent = '⏸️';
-                    if (mobileMusicBtn) mobileMusicBtn.textContent = '⏸️';
-                    console.log('🎵 Música iniciada desde desktop');
-                });
-            } else {
-                backgroundMusic.pause();
-                musicBtn.textContent = '🎵';
-                if (mobileMusicBtn) mobileMusicBtn.textContent = '🎵';
-                console.log('🎵 Música pausada desde desktop');
-            }
-        });
-    }
-    
-    if (mobileMusicBtn) {
-        console.log('🎵 Configurando event listener para botón móvil');
-        mobileMusicBtn.addEventListener('click', () => {
-            console.log('🎵 Clic en botón de música (móvil)');
-            playSound('click');
-            
-            // Lógica directa para el botón móvil
-            if (!backgroundMusic.src || backgroundMusic.src === window.location.href) {
-                backgroundMusic.src = 'sounds/Lost in the Matrix.mp3';
-                backgroundMusic.volume = 0.6;
-                backgroundMusic.loop = true;
-                console.log('🎵 Música cargada para móvil');
-            }
-            
-            if (backgroundMusic.paused) {
-                backgroundMusic.play().then(() => {
-                    mobileMusicBtn.textContent = '⏸️';
-                    if (musicBtn) musicBtn.textContent = '⏸️';
-                    console.log('🎵 Música iniciada desde móvil');
-                });
-            } else {
-                backgroundMusic.pause();
-                mobileMusicBtn.textContent = '🎵';
-                if (musicBtn) musicBtn.textContent = '🎵';
-                console.log('🎵 Música pausada desde móvil');
-            }
-        });
-    }
-    
-    console.log('✅ Música de fondo inicializada correctamente');
+    // Crear instancia del reproductor
+    musicPlayer = new MusicPlayer();
     
     // Función de prueba para verificar que todo funciona
     window.testMusic = function() {
         console.log('🧪 Función de prueba de música llamada');
-        const backgroundMusic = document.getElementById('background-music');
-        if (backgroundMusic) {
-            console.log('🧪 Estado de prueba:', {
-                src: backgroundMusic.src,
-                paused: backgroundMusic.paused,
-                ended: backgroundMusic.ended,
-                currentTime: backgroundMusic.currentTime,
-                duration: backgroundMusic.duration,
-                volume: backgroundMusic.volume
+        if (musicPlayer) {
+            console.log('🧪 Estado del reproductor:', {
+                isPlaying: musicPlayer.isPlaying,
+                currentTime: musicPlayer.currentTime,
+                duration: musicPlayer.duration,
+                volume: musicPlayer.audio.volume
             });
+            musicPlayer.togglePlayPause();
         }
-        toggleMusic();
     };
+    
+    console.log('✅ Reproductor de música inicializado correctamente');
 }
 
-// Función para crear degradado suave del volumen
-function startVolumeFade() {
-    if (!backgroundMusic || !musicPlaying) return;
-    
-    console.log('🎵 Starting volume fade: 60% → 40% in 20 seconds');
-    
-    const startVolume = 0.6; // 60%
-    const endVolume = 0.4;   // 40%
-    const fadeDuration = 20000; // 20 segundos
-    const fadeSteps = 200; // 200 pasos para transición suave
-    const stepDuration = fadeDuration / fadeSteps;
-    
-    let currentStep = 0;
-    
-    const fadeInterval = setInterval(() => {
-        currentStep++;
-        
-        // Calcular volumen actual usando función de suavizado
-        const progress = currentStep / fadeSteps;
-        const currentVolume = startVolume - (startVolume - endVolume) * progress;
-        
-        backgroundMusic.volume = currentVolume;
-        
-        if (currentStep >= fadeSteps) {
-            clearInterval(fadeInterval);
-            console.log('🎵 Volume fade completed: now at 40% (background music)');
-        }
-    }, stepDuration);
-}
 
-// Función para iniciar la música automáticamente
-function startBackgroundMusic() {
-    if (backgroundMusic) {
-        // Iniciar música inmediatamente cuando se abre la página
-        const playPromise = backgroundMusic.play();
-        if (playPromise !== undefined) {
-            playPromise.then(() => {
-                musicPlaying = true;
-                musicBtn.innerHTML = '🎵';
-                musicBtn.title = 'Pausar música';
-                console.log("Música de fondo iniciada");
-            }).catch(error => {
-                console.log("Autoplay bloqueado, usuario debe iniciar música manualmente");
-                musicBtn.innerHTML = '🔇';
-                musicBtn.title = 'Reproducir música';
-                musicPlaying = false;
-                
-                // Si el autoplay falla, permitir al usuario iniciar con cualquier interacción
-                document.addEventListener('click', function startMusicOnInteraction() {
-                    if (!musicPlaying) {
-                        backgroundMusic.play().then(() => {
-                            musicPlaying = true;
-                            musicBtn.innerHTML = '🎵';
-                            musicBtn.title = 'Pausar música';
-                        });
-                        document.removeEventListener('click', startMusicOnInteraction);
-                    }
-                }, { once: true });
-            });
-        }
-    }
-}
 
 function initGifModal() {
     console.log('🔧 Inicializando modal GIF...');
@@ -1128,20 +1104,103 @@ function addVibrationEffect() {
 
 // Formulario del guestbook (falso)
 function initGuestbook() {
+    console.log('📖 Inicializando guestbook...');
+    
     const form = document.querySelector('.guestbook-form');
-    if (form) {
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const name = document.getElementById('name').value || 'Anonymous_Coward';
-            const message = document.getElementById('message').value || '¡Software libre o muerte!';
-            
-            // Mostrar mensaje de confirmación
-            showMessage(`¡Gracias ${name}! Tu mensaje rebelde ha sido registrado: "${message}"`);
-            
-            // Limpiar formulario
-            form.reset();
-        });
+    if (!form) {
+        console.error('❌ Formulario del guestbook no encontrado');
+        return;
+    }
+    
+    console.log('✅ Formulario del guestbook encontrado');
+    
+    // Remover event listeners anteriores si existen
+    form.removeEventListener('submit', form.submitHandler);
+    
+    // Crear handler para el formulario
+    form.submitHandler = function(e) {
+        e.preventDefault();
+        console.log('📝 Envío del formulario del guestbook');
+        
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const messageInput = document.getElementById('message');
+        
+        if (!nameInput || !messageInput) {
+            console.error('❌ Campos del formulario no encontrados');
+            return;
+        }
+        
+        const name = nameInput.value.trim() || 'Anonymous_Coward';
+        const email = emailInput ? emailInput.value.trim() : '';
+        const message = messageInput.value.trim() || '¡Software libre o muerte!';
+        
+        console.log('📝 Datos del formulario:', { name, email, message });
+        
+        // Reproducir sonido
+        playSound('click');
+        
+        // Mostrar mensaje de carga
+        showMessage('📧 Enviando mensaje rebelde a zatobox@proton.me...');
+        
+        // Enviar email usando EmailJS
+        sendGuestbookEmail(name, email, message);
+    };
+    
+    // Agregar event listener
+    form.addEventListener('submit', form.submitHandler);
+    
+    console.log('✅ Guestbook inicializado correctamente');
+}
+
+// Función para enviar email del guestbook
+function sendGuestbookEmail(name, email, message) {
+    const form = document.querySelector('.guestbook-form');
+    
+    // Opción 1: Usar EmailJS con Gmail/Outlook (recomendado)
+    if (typeof emailjs !== 'undefined') {
+        
+        // Enviar email usando tu sintaxis
+        emailjs.send("service_cx3c31s", "template_o0ixb8u")
+            .then(function(response) {
+                console.log('✅ Email enviado exitosamente:', response);
+                showMessage(`¡Gracias ${name}! Tu mensaje rebelde ha sido enviado.`);
+                // Limpiar formulario después del envío exitoso
+                if (form) form.reset();
+            })
+            .catch(function(error) {
+                console.error('❌ Error al enviar email:', error);
+                showMessage(`¡Gracias ${name}! Tu mensaje rebelde ha sido registrado: "${message}"`);
+                // Limpiar formulario incluso si hay error
+                if (form) form.reset();
+            });
+    } else {
+        // Opción 2: Fallback - Guardar en localStorage y mostrar instrucciones
+        console.log('📧 EmailJS no disponible, guardando en localStorage');
+        
+        // Guardar mensaje en localStorage
+        const guestbookMessages = JSON.parse(localStorage.getItem('zatobox_guestbook') || '[]');
+        const newMessage = {
+            id: Date.now(),
+            name: name,
+            email: email,
+            message: message,
+            timestamp: new Date().toISOString(),
+            status: 'pending'
+        };
+        
+        guestbookMessages.push(newMessage);
+        localStorage.setItem('zatobox_guestbook', JSON.stringify(guestbookMessages));
+        
+        showMessage(`¡Gracias ${name}! Tu mensaje rebelde ha sido guardado. Te contactaremos a ${email || 'tu email'} pronto.`);
+        
+        // Limpiar formulario
+        if (form) form.reset();
+        
+        // Mostrar instrucciones para contacto manual
+        setTimeout(() => {
+            showMessage('💡 También puedes contactarnos directamente: zatobox@gmail.com o alcolabs.exe@gmail.com');
+        }, 3000);
     }
 }
 
@@ -1196,7 +1255,7 @@ function showMessage(text) {
 setTimeout(() => {
     randomGlitch();
     addVibrationEffect();
-    initGuestbook();
+    // initGuestbook(); // Removido - reemplazado por sección de contacto
     initLogoGlitchEffect();
 }, 2000);
 
@@ -1366,7 +1425,7 @@ function initVHSLoadingScreen() {
     console.log('📺 Iniciando pantalla VHS retro...');
     
     // Inicializar música de fondo inmediatamente
-    initBackgroundMusic();
+    initMusicPlayer();
     
     const vhsScreen = document.getElementById('vhs-loading-screen');
     const timerElement = document.getElementById('vhs-timer');
@@ -1638,9 +1697,10 @@ function initMainContent() {
     initEffects();
     initEasterEggs();
     initSoundEffects();
-    startBackgroundMusic();
+    initMusicPlayer();
     initAnimations();
     initGifModal();
+    // initGuestbook(); // Removido - reemplazado por sección de contacto
     updateTimestamps();
     
     // Contador de visitantes falso
@@ -1964,3 +2024,117 @@ document.addEventListener('DOMContentLoaded', function() {
         initMobileTooltips();
     });
 }); 
+
+// ================================
+// FUNCIONES DE DEBUGGING DEL GUESTBOOK
+// ================================
+
+// Función para ver mensajes guardados en localStorage (para debugging)
+function viewGuestbookMessages() {
+    const messages = JSON.parse(localStorage.getItem('zatobox_guestbook') || '[]');
+    console.log('📖 Mensajes del guestbook guardados:', messages);
+    
+    if (messages.length === 0) {
+        console.log('📭 No hay mensajes guardados');
+        return;
+    }
+    
+    // Mostrar mensajes en consola de forma legible
+    messages.forEach((msg, index) => {
+        console.log(`\n📝 Mensaje ${index + 1}:`);
+        console.log(`   👤 Nombre: ${msg.name}`);
+        console.log(`   📧 Email: ${msg.email || 'No proporcionado'}`);
+        console.log(`   💬 Mensaje: ${msg.message}`);
+        console.log(`   📅 Fecha: ${new Date(msg.timestamp).toLocaleString()}`);
+        console.log(`   📊 Estado: ${msg.status}`);
+    });
+    
+    // También mostrar en un alert para fácil copia
+    const messageText = messages.map((msg, index) => 
+        `Mensaje ${index + 1}:\n👤 ${msg.name}\n📧 ${msg.email || 'No email'}\n💬 ${msg.message}\n📅 ${new Date(msg.timestamp).toLocaleString()}\n`
+    ).join('\n');
+    
+    alert(`📖 Mensajes del Guestbook (${messages.length} total):\n\n${messageText}`);
+}
+
+// Función para limpiar mensajes guardados
+function clearGuestbookMessages() {
+    localStorage.removeItem('zatobox_guestbook');
+    console.log('🗑️ Mensajes del guestbook eliminados');
+    alert('Mensajes del guestbook eliminados');
+}
+
+// Función para copiar email al portapapeles
+function copyEmail(email) {
+    navigator.clipboard.writeText(email).then(function() {
+        console.log('📋 Email copiado al portapapeles:', email);
+        
+        // Mostrar mensaje de confirmación
+        const messageDiv = document.createElement('div');
+        messageDiv.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #000;
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            padding: 15px 20px;
+            z-index: 10000;
+            font-family: 'VT323', monospace;
+            font-size: 16px;
+            text-align: center;
+            border-radius: 6px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+            animation: copy-message-appear 0.3s ease-out;
+        `;
+        messageDiv.textContent = `📋 ${email} copiado al portapapeles!`;
+        
+        document.body.appendChild(messageDiv);
+        
+        // Agregar CSS para la animación si no existe
+        if (!document.querySelector('#copy-message-css')) {
+            const style = document.createElement('style');
+            style.id = 'copy-message-css';
+            style.textContent = `
+                @keyframes copy-message-appear {
+                    from {
+                        opacity: 0;
+                        transform: translate(-50%, -50%) scale(0.8);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translate(-50%, -50%) scale(1);
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        // Remover mensaje después de 2 segundos
+        setTimeout(() => {
+            messageDiv.remove();
+        }, 2000);
+        
+        // Efecto de sonido
+        playSound('click');
+        
+    }).catch(function(err) {
+        console.error('❌ Error al copiar email:', err);
+        
+        // Fallback para navegadores que no soportan clipboard API
+        const textArea = document.createElement('textarea');
+        textArea.value = email;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        
+        // Mostrar mensaje de confirmación
+        alert(`📋 ${email} copiado al portapapeles!`);
+    });
+}
+
+// Hacer las funciones disponibles globalmente para debugging
+window.viewGuestbookMessages = viewGuestbookMessages;
+window.clearGuestbookMessages = clearGuestbookMessages; 

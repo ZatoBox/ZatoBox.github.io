@@ -48,8 +48,27 @@
             <button class="control-btn" id="forwardBtn" title="Go Forward">➡️</button>
             <button class="control-btn alcolabs-btn" id="alcolabsBtn" title="Discover Alcolabs">
                 <img src="images/Alcolabs.png" alt="Alcolabs Logo" class="alcolabs-icon">
+                <span class="alcolabs-text">Alcolabs</span>
             </button>
-            <button class="control-btn music-btn" id="musicBtn" title="Pause/Play music">🎵</button>
+        </div>
+    </div>
+
+    <!-- Reproductor de música minimalista -->
+    <div class="music-player-mini">
+        <button class="music-control-btn-mini" id="playPauseBtn" title="Play/Pause">▶️</button>
+        <div class="music-info-mini">
+            <span class="music-title-mini">Lost in the Matrix</span>
+            <div class="music-progress-mini">
+                <div class="progress-bar-mini">
+                    <div class="progress-fill-mini" id="progressFill"></div>
+                </div>
+                <span class="time-display-mini" id="timeDisplay">0:00</span>
+            </div>
+        </div>
+        <div class="volume-control-mini">
+            <input type="range" id="volumeSlider" min="0" max="100" value="60" class="volume-slider-mini" title="Volume">
+        </div>
+    </div>
         </div>
     </div>
 
@@ -66,8 +85,25 @@
                 <button class="mobile-control-btn" id="mobileForwardBtn" title="Go Forward">➡️</button>
                 <button class="mobile-control-btn alcolabs-btn" id="mobileAlcolabsBtn" title="Discover Alcolabs">
                     <img src="images/Alcolabs.png" alt="Alcolabs Logo" class="alcolabs-icon">
+                    <span class="alcolabs-text">Alcolabs</span>
                 </button>
-                <button class="mobile-control-btn music-btn" id="mobileMusicBtn" title="Pause/Play music">🎵</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reproductor de música móvil compacto -->
+    <div class="mobile-music-player-compact" id="mobileMusicPlayer">
+        <button class="mobile-music-toggle-compact" id="mobileMusicToggle">▶️</button>
+        <div class="mobile-music-info-compact">
+            <span class="mobile-music-title-compact">Lost in the Matrix</span>
+            <div class="mobile-progress-bar-compact">
+                <div class="mobile-progress-fill-compact" id="mobileProgressFill"></div>
+            </div>
+        </div>
+        <div class="mobile-volume-control-compact">
+            <input type="range" id="mobileVolumeSlider" min="0" max="100" value="60" class="mobile-volume-slider-compact">
+        </div>
+    </div>
             </div>
         </div>
     </div>
@@ -220,23 +256,25 @@
                 <div class="handshake-icon">🤝</div>
             </div>
             <div class="content-text">
-                <div class="guestbook">
-                    <h3>📖 GUESTBOOK - SIGN THE REBELLION</h3>
-                    <form class="guestbook-form">
-                        <div class="form-group">
-                            <label for="name">Your hacker name:</label>
-                            <input type="text" id="name" placeholder="Anonymous_Coward">
+                <div class="contact-section">
+                    <h3>📧 CONTACT US - JOIN THE REBELLION</h3>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <span class="contact-label">🎭 ZatoBox Team:</span>
+                            <div class="contact-email-container">
+                                <span class="contact-email" id="zatobox-email">ikhunsa@proton.me</span>
+                                <button class="copy-btn" onclick="copyEmail('ikhunsa@proton.me')">📋 Copy</button>
+                                <a href="mailto:ikhunsa@proton.me" class="mailto-btn">✉️ Write</a>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="email">Your email (optional):</label>
-                            <input type="email" id="email" placeholder="hacker@zombie.com">
-                        </div>
-                        <div class="form-group">
-                            <label for="message">Your rebellious message:</label>
-                            <textarea id="message" placeholder="Free software or death!"></textarea>
-                        </div>
-                        <button type="submit" class="submit-btn">🚀 SEND MESSAGE</button>
-                    </form>
+                    </div>
+                    <div class="contact-message">
+                        <p>💡 <strong>Choose your path:</strong></p>
+                        <ul>
+                            <li>📋 <strong>Copy</strong> - Copy the email to your clipboard</li>
+                            <li>✉️ <strong>Write</strong> - Open your email client directly</li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="contribution-ways">
                     <h3>🛠️ WAYS TO CONTRIBUTE</h3>
@@ -375,6 +413,8 @@ npm start
     <audio id="click-sound" src="sounds/click.mp3" preload="auto" volume="0.3"></audio>
     <!-- Música de fondo - cargar solo cuando se necesite -->
     <audio id="background-music" preload="none" volume="0.6" loop></audio>
+
+    <!-- EmailJS removido - reemplazado por sección de contacto directo -->
 
     <script src="script.js"></script>
 </body>
